@@ -3,18 +3,41 @@
 <head>
     <meta charset="utf-8">
     <title>純プレイヤー</title>
+    <style>
+        twitchContainer{
+            display:flex;       /*横並びに*/
+            gap:10px;           /*動画とチャットの隙間*/
+            max-width:1000px;   /*全体の横幅の限界*/
+        }
+        iframe{
+            border:none;        /*枠線を消してすっきりさせる*/
+        }
+    </style>
 </head>
 <body>
 
     <h1>純 Twitch</h1>
-    <p>ver:1.0.6</p>
+    <p>ver:1.0.7</p>
 
-    <iframe
-        src="https://player.twitch.tv/?channel=kato_junichi0817&parent=shu1515.github.io"
-        height="378"
-        width="620"
-        allowfullscreen>
-    </iframe>
+    <div class="twitchContainer">
+        <!--動画プレイヤー-->
+        <iframe src="https://player.twitch.tv/?channel=kato_junichi0817&parent=shu1515.github.io&autoplay=true"
+                height="378"
+                width="620"
+                allowfullscreen>
+        </iframe>
+
+        <!--チャット欄-->
+        <iframe src="https://www.twitch.tv/popout/kato_junichi0817/chat?popout=&parent=shu1515.github.io"
+                height="378"
+                width="200"
+                allowfullscreen>
+        </iframe>
+
+    </div>
+
+    
+
 
 </body>
 </html>
