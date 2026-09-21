@@ -5,11 +5,18 @@
     <title>純プレイヤー</title>
     <style>
 
+        /*配信画面・コメント欄のサイズ定義*/
+        :root{
+            --VIDEO_HEIGHT:400px;   /*配信画面：高さ*/
+            --VIDEO_WIDTH:600px;    /*配信画面：幅*/
+            --CHAT_WIDTH:300px;     /*チャット：幅*/
+        }
+
         /*サイト全体のデザイン*/
         body{
             background-color:#121212;   /*背景：高級感のある黒*/
             color:#ffffff;              /*文字：白*/
-            font-family:sans-serif;     /*文字フォント：ゴシック体*/
+            font-family:sans-serif;       /*文字フォント：ゴシック体*/
             padding:20px;
         }
 
@@ -49,6 +56,19 @@
             background-color:#772ce8;
         }
 
+        /*配信画面を横並びにするための設定*/
+        #MultiviewWrapper{
+            display:flex;
+            flex-wrap:wrap; /*画面幅が足りないときは下に落ちる*/
+            gap:30px;       /*窓の隙間*/
+        }
+
+        /*窓のブロック*/
+        WindowBlock{
+            display: flex;
+            flex-direction:column;  /*タイトル・配信画面を縦に並べる*/
+        }
+
         /*配信画面を並べるデザイン*/
         TwitchContainer{
             display:flex;       /*横並びに*/
@@ -59,20 +79,30 @@
             padding-top:20px;
         }
 
+        .TwitchVideo{
+            width: var(--VIDEO_WIDTH);
+            height: var(--VIDEO_HEIGHT);
+        }
+
+        .TwitchChat{
+            width: var(--CHAT_WIDTH);
+            height: var(--VIDEO_HEIGHT);
+        }
+
+
         iframe{
             border:none;        /*枠線を消してすっきりさせる*/
             color-scheme:dark;
         }
+
     </style>
 </head>
 <body>
 
     <h1>純 Twitch</h1>
-    <p>ver:2.0.4</p>
+    <p>ver:2.0.6</p>
 
-    <div id="debug-display" class="DebugLog">
-        テスト状況：まだボタンは押されていない
-    </div>
+    
 
     <!--配信者を入力するフォーム（2画面分）-->
     <div class="InputArea">
@@ -92,42 +122,55 @@
     </div>
 
     <!--表示エリア-->
-    <!--１画面目の表示エリア-->
-    <h2>1画面目</h2>
-    <div class="TwitchContainer">
-        <!--プレイヤー-->
-        <iframe id="video-1"
-                src="https://player.twitch.tv/?channel=stylishnoob4&parent=shu1515.github.io&autoplay=true"
-                height="378"
-                width="620"
-                allowfullscreen>
-        </iframe>
-        <!--チャット欄-->
-        <iframe id="chat-1"
-                src="https://www.twitch.tv/embed/stylishnoob4/chat?darkpopout=true&parent=shu1515.github.io"
-                height="378"
-                width="400">
-        </iframe>
-    </div>
-
-    <!--２画面目の表示エリア-->
-    <h2>2画面目</h2>
-    <div class="TwitchContainer">
-        <!--プレイヤー-->
-        <iframe id="video-2"
-                src="https://player.twitch.tv/?channel=kato_junichi0817&parent=shu1515.github.io&autoplay=true"
-                height="378"
-                width="620"
-                allowfullscreen>
-        </iframe>
-        <!--チャット欄-->
-        <iframe id="chat-2"
-                src="https://www.twitch.tv/embed/kato_junichi0817/chat?darkpopout=true&parent=shu1515.github.io"
-                height="378"
-                width="400">
-        </iframe>
-    </div>
-
+    <div id="MultiviewWrapper">
+        <!--窓１-->
+        <div class="WindowBlock">
+            <h2>1画面目</h2>
+            <div class="TwitchContainer">
+                <!--プレイヤー-->
+                <iframe 
+                    id="video-1"
+                    class="TwitchVideo"
+                    src="https://player.twitch.tv/?channel=stylishnoob4&parent=shu1515.github.io&autoplay=true"
+                    height=WINDOW_HEIGHT
+                    width=WINDOW_WIDTH
+                    allowfullscreen>
+                </iframe>
+                <!--チャット欄-->
+                <iframe 
+                    id="chat-1"
+                    class="TwitchChat"
+                    src="https://www.twitch.tv/embed/stylishnoob4/chat?darkpopout=true&parent=shu1515.github.io"
+                    height=WINDOW_HEIGHT
+                    width=CHAT_WIDTH>
+                </iframe>
+            </div>
+        </div>
+        <!--窓２-->
+        <div class="WindowBlock">
+            <h2>2画面目</h2>
+            <div class="TwitchContainer">
+                <!--プレイヤー-->
+                <iframe 
+                    id="video-2"
+                    class="TwitchVideo"
+                    src="https://player.twitch.tv/?channel=kato_junichi0817&parent=shu1515.github.io&autoplay=true"
+                    height=WINDOW_HEIGHT
+                    width=WINDOW_WIDTH
+                    allowfullscreen>
+                </iframe>
+                <!--チャット欄-->
+                <iframe
+                    id="chat-2"
+                    class="TwitchChat"
+                    src="https://www.twitch.tv/embed/kato_junichi0817/chat?darkpopout=true&parent=shu1515.github.io"
+                    height=WINDOW_HEIGHT
+                    width=CHAT_WIDTH>
+                </iframe>
+            </div>
+        </div>
+    </div><!--MultiviewWrapper-->
+    
     <!--ボタンが押されたときにURLを書き換える処理-->
     <script>
         function ChangeStreamer(windowNum){
