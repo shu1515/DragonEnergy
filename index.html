@@ -7,9 +7,10 @@
 
         /*配信画面・コメント欄のサイズ定義*/
         :root{
-            --VIDEO_HEIGHT:700px;   /*配信画面：高さ*/
-            --VIDEO_WIDTH:600px;    /*配信画面：幅*/
-            --CHAT_WIDTH:300px;     /*チャット：幅*/
+            --VIDEO_HEIGHT:700px;           /*配信画面：高さ*/
+            --VIDEO_WIDTH:600px;            /*配信画面：幅*/
+            --CHAT_WIDTH:300px;             /*チャット：幅*/
+            --VIDEO_CHAT_GAP_WIDTH:10px;    /*動画とチャットのすき間*/
         }
 
         /*サイト全体のデザイン*/
@@ -56,6 +57,22 @@
             background-color:#772ce8;
         }
 
+        /*チャット切り替えボタン*/
+        .ChatButton{
+            padding:8px 15px;
+            background-color: #f77f00;
+            color:white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        .ChatButton:hover{
+            background-color: #fcbf49;
+            color: #000000;
+        }
+
         /*お気に入りボタン*/
         .FavoriteButtons{
             display: inline-block;
@@ -90,8 +107,8 @@
 
         /*動画とチャットを横並びにする設定*/
         TwitchContainer{
-            display:flex;       /*横並びに*/
-            gap:10px;           /*動画とチャットの隙間*/
+            display:flex;           /*横並びに*/
+            gap:var(--gap-width);   /*動画とチャットの隙間*/
             max-width:1920px;   /*全体の横幅の限界*/
             margin-bottom:30px;
             border-top:1px solid #2f2f35;
@@ -102,26 +119,43 @@
         iframe{
             border:none;        /*枠線を消してすっきりさせる*/
             color-scheme:dark;
+            transition:width 0.2s, opacity 0.2s;
         }
+
+        /*通常時のビデオサイズ*/
         .TwitchVideo{
             width: var(--VIDEO_WIDTH);
             height: var(--VIDEO_HEIGHT);
         }
+        /*通常時のチャット欄サイズ*/
         .TwitchChat{
             width: var(--CHAT_WIDTH);
             height: var(--VIDEO_HEIGHT);
+            opacity:1;
         }
+        /*非表示時のチャット欄サイズ*/
+        .TwitchChat.IsHidden{
+            width: 0px !important;  /*横幅を０に*/
+            opacity: 0 !important;  /*完全に透明化*/
+            pointer-events: none;   /*クリック不可へ*/
+        }
+        /*チャット欄非表示時のビデオサイズ*/
+        .TwitchChat.IsHidden~.TwitchVideo{
+            /*チャット欄が非表示時の際にビデオサイズの横幅を広げている*/
+            width: calc(var(--VIDEO_WIDTH) + var(--VIDEO_CHAT_GAP_WIDTH) + var(--CHAT_WIDTH)) !important;
+        }
+
     </style>
 </head>
 <body>
 
     <h1>まっど純</h1>
-    <p>ver:2.0.9</p>
+    <p>ver:2.1.0</p>
 
     <!--配信者を入力するフォーム（2画面分）-->
     <div class="InputArea">
         <h4>配信者の変更</h4>
-        <p>　任意の配信者のTwitchID、もしくはTwitchのURLを以下に入力</p>
+        <p>　任意の配信者のTwitchID、もしくはTwitchのURLを以下に入力（右側のボタンはショートカット機能）</p>
 
         <!--１画面目-->
         <div class="InputGourp">
@@ -129,6 +163,7 @@
             <label>1画面目：</label>
             <input type="text" id="streamer-id-1" value="kato_junichi0817" placeholder="配信者のIDを入力" />
             <button class="ApplyButton" onclick="ChangeStreamer(1)">変更</button>
+            <button class="ChatButton" onclick="SwitchChatDisplay(1)">💬</button>
 
             <!--お気に入りボタン-->
             <div class="FavoriteButtons">
@@ -145,6 +180,7 @@
             <label>2画面目：</label>
             <input type="text" id="streamer-id-2" value="hanjoudesu" placeholder="配信者のIDを入力" />
             <button class="ApplyButton" onclick="ChangeStreamer(2)">変更</button>
+            <button class="ChatButton" onclick="SwitchChatDisplay(2)">💬</button>
 
             <!--お気に入りボタン-->
             <div class="FavoriteButtons">
@@ -164,22 +200,22 @@
         <div class="WindowBlock">
             <h2>1画面目</h2>
             <div class="TwitchContainer">
-                <!--プレイヤー-->
-                <iframe 
-                    id="video-1"
-                    class="TwitchVideo"
-                    src="https://player.twitch.tv/?channel=stylishnoob4&parent=shu1515.github.io&autoplay=true"
-                    height=WINDOW_HEIGHT
-                    width=WINDOW_WIDTH
-                    allowfullscreen>
-                </iframe>
                 <!--チャット欄-->
                 <iframe 
                     id="chat-1"
                     class="TwitchChat"
-                    src="https://www.twitch.tv/embed/stylishnoob4/chat?darkpopout=true&parent=shu1515.github.io"
+                    src="https://www.twitch.tv/embed/kato_junichi0817/chat?darkpopout=true&parent=shu1515.github.io"
                     height=WINDOW_HEIGHT
                     width=CHAT_WIDTH>
+                </iframe>
+                <!--プレイヤー-->
+                <iframe 
+                    id="video-1"
+                    class="TwitchVideo"
+                    src="https://player.twitch.tv/?channel=kato_junichi0817&parent=shu1515.github.io&autoplay=true"
+                    height=WINDOW_HEIGHT
+                    width=WINDOW_WIDTH
+                    allowfullscreen>
                 </iframe>
             </div>
         </div>
@@ -187,22 +223,22 @@
         <div class="WindowBlock">
             <h2>2画面目</h2>
             <div class="TwitchContainer">
-                <!--プレイヤー-->
-                <iframe 
-                    id="video-2"
-                    class="TwitchVideo"
-                    src="https://player.twitch.tv/?channel=kato_junichi0817&parent=shu1515.github.io&autoplay=true"
-                    height=WINDOW_HEIGHT
-                    width=WINDOW_WIDTH
-                    allowfullscreen>
-                </iframe>
                 <!--チャット欄-->
                 <iframe
                     id="chat-2"
                     class="TwitchChat"
-                    src="https://www.twitch.tv/embed/kato_junichi0817/chat?darkpopout=true&parent=shu1515.github.io"
+                    src="https://www.twitch.tv/embed/stylishnoob4/chat?darkpopout=true&parent=shu1515.github.io"
                     height=WINDOW_HEIGHT
                     width=CHAT_WIDTH>
+                </iframe>
+                <!--プレイヤー-->
+                <iframe 
+                    id="video-2"
+                    class="TwitchVideo"
+                    src="https://player.twitch.tv/?channel=stylishnoob4&parent=shu1515.github.io&autoplay=true"
+                    height=WINDOW_HEIGHT
+                    width=WINDOW_WIDTH
+                    allowfullscreen>
                 </iframe>
             </div>
         </div>
@@ -210,6 +246,15 @@
     
     <!--ボタンが押されたときにURLを書き換える処理-->
     <script>
+
+        // チャット表示切り替えボタンが押されたときの動作
+        function SwitchChatDisplay(windowNum){
+            // 対象チャット欄の iframe を取得
+            const chatElement = document.getElementById('chat-' + windowNum);
+
+            // チャット欄のトグル変更
+            chatElement.classList.toggle('IsHidden');
+        }
 
         // お気に入りボタンが押されたときの動作
         function SetFavorite(windowNum, streamerId){
