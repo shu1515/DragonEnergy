@@ -5,41 +5,155 @@
     <title>純プレイヤー</title>
     <style>
 
-        /*サイト全体の背景色・文字色設定*/
+        /*サイト全体のデザイン*/
         body{
             background-color:#121212;   /*背景：高級感のある黒*/
             color:#ffffff;              /*文字：白*/
             font-family:sans-serif;     /*文字フォント：ゴシック体*/
             padding:20px;
         }
-        twitchContainer{
+
+        /*入力エリアのデザイン*/
+        InputArea{
+            background-color:#1f1f23;
+            padding:15px;
+            border-radius:8px;
+            margin-bottom:20px;
+            max-width:1000px;
+        }
+
+        InputGroup{
+            margin-bottom:10px;
+        }
+
+        input{
+            padding:8px;
+            width:250px;
+            border-radius:4px;
+            border:1px solid #464649;
+            background-color:#0e0e10;
+            color:white;
+        }
+
+        button{
+            padding:8px 15px;
+            background-color:#9135ff; /*Twitchカラーに寄せている*/
+            color:white;
+            border:none;
+            border-radius:4px;
+            cursor:pointer;
+            font-weight:bold;
+        }
+
+        button:hover{
+            background-color:#772ce8;
+        }
+
+        /*配信画面を並べるデザイン*/
+        TwitchContainer{
             display:flex;       /*横並びに*/
             gap:10px;           /*動画とチャットの隙間*/
             max-width:1920px;   /*全体の横幅の限界*/
+            margin-bottom:30px;
+            border-top:1px solid #2f2f35;
+            padding-top:20px;
         }
+
         iframe{
             border:none;        /*枠線を消してすっきりさせる*/
+            color-scheme:dark;
         }
     </style>
 </head>
 <body>
 
     <h1>純 Twitch</h1>
-    <p>ver:1.2.1</p>
+    <p>ver:2.0.0</p>
 
-    <div class="twitchContainer">
-        <!--動画プレイヤー-->
-        <iframe src="https://player.twitch.tv/?channel=stylishnoob4&parent=shu1515.github.io&autoplay=true"
+    <!--配信者を入力するフォーム（2画面分）-->
+    <div class="InputArea">
+        <h3>配信者の変更</h3>
+        <!--１画面目-->
+        <div class="InputGourp">
+            <label>1画面目：</label>
+            <input type="text" id="streamer-id-1" value="kato_junichi0817" placeholder="配信者のIDを入力" />
+            <button onclicek="changeStreamer(1)">適用</button>
+        </div>
+        <!--２画面目-->
+        <div class="InputGourp">
+            <label>2画面目：</label>
+            <input type="text" id="streamer-id-2" value="twitch" placeholder="配信者のIDを入力" />
+            <button onclicek="changeStreamer(2)">適用</button>
+        </div>
+    </div>
+
+    <!--表示エリア-->
+    <!--１画面目の表示エリア-->
+    <h2>1画面目</h2>
+    <div class="TwitchContainer">
+        <!--プレイヤー-->
+        <iframe id="video-1"
+                src="https://player.twitch.tv/?channel=stylishnoob4&parent=shu1515.github.io&autoplay=true"
                 height="378"
                 width="620"
                 allowfullscreen>
         </iframe>
-
         <!--チャット欄-->
-        <iframe src="https://www.twitch.tv/embed/stylishnoob4/chat?darkpopout=true&parent=shu1515.github.io"
+        <iframe id="chat-1"
+                src="https://www.twitch.tv/embed/stylishnoob4/chat?darkpopout=true&parent=shu1515.github.io"
                 height="378"
                 width="400">
         </iframe>
     </div>
+
+    <!--２画面目の表示エリア-->
+    <h2>2画面目</h2>
+    <div class="TwitchContainer">
+        <!--プレイヤー-->
+        <iframe id="video-2"
+                src="https://player.twitch.tv/?channel=stylishnoob4&parent=shu1515.github.io&autoplay=true"
+                height="378"
+                width="620"
+                allowfullscreen>
+        </iframe>
+        <!--チャット欄-->
+        <iframe id="chat-2"
+                src="https://www.twitch.tv"
+                height="378"
+                width="400">
+        </iframe>
+    </div>
+
+    <!--ボタンが押されたときにURLを書き換える処理-->
+    <script>
+        function ChangeStreamer(windowNum){
+            // 入力フォームに入力された文字（ID）を読み取る
+            let inputValue = document.getElementById('streamer-id-1').value;
+            if(windowNum === 2){
+                inputValue = document.getElementById('streamer-id-2').value;
+            }
+
+            // URLが入力された場合、ID部分のみを抜き取る処理
+            let streamerId = inputValue.trim();
+            if(streamerId.includes('twitch.tv/')){
+                streamerId = streamerId.split('twitch.tv/')[1].split('?')[0].split('/')[0];
+            }
+
+            // 何も入力がない場合は処理しない
+            if(!streamerId){
+                alert('IDを入力してください');
+                return;
+            }
+
+            // 対象の iframe を新しく作り変える
+            const newVideoUrl = "https://plyaer.twitch.tv/?channel=" + streamerId + "&parent=shu1515.github.io&autoplayer=true"
+            const newChatUrl = "https://www.twitch.tv/embed/" + streamerId + "/chat?darkpopout=true&parent=shu1515.github.io"
+
+            document.getElementById('video-'+ windowNum).src = newVideoUrl;
+            document.getElementById('chat-'+ windowNum).src = newChatUrl;
+        }
+
+    </script>
+
 </body>
 </html>
