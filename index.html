@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="utf-8">
-    <title>純プレイヤー</title>
+    <title>まっど純</title>
     <style>
 
         /*配信画面・コメント欄のサイズ定義*/
@@ -42,7 +42,8 @@
             color:white;
         }
 
-        button{
+        /*変更ボタン*/
+        .ApplyButton{
             padding:8px 15px;
             background-color:#9135ff; /*Twitchカラーに寄せている*/
             color:white;
@@ -51,9 +52,27 @@
             cursor:pointer;
             font-weight:bold;
         }
-
-        button:hover{
+        .ApplyButton:hover{
             background-color:#772ce8;
+        }
+
+        /*お気に入りボタン*/
+        .FavoriteButtons{
+            display: inline-block;
+            margin-left:15px;
+        }
+        .FavoriteButton{
+            padding: 6px 12px;
+            background-color: #3a3a3d;
+            color: #efeff1;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+            font-size: 13px;
+        }
+        .FavoriteButton:hover{
+            background-color: #464649;
         }
 
         /*配信画面を横並びにするための設定*/
@@ -63,13 +82,13 @@
             gap:30px;       /*窓の隙間*/
         }
 
-        /*窓のブロック*/
+        /*タイトル・配信画面を縦に並べる設定*/
         WindowBlock{
             display: flex;
             flex-direction:column;  /*タイトル・配信画面を縦に並べる*/
         }
 
-        /*配信画面を並べるデザイン*/
+        /*動画とチャットを横並びにする設定*/
         TwitchContainer{
             display:flex;       /*横並びに*/
             gap:10px;           /*動画とチャットの隙間*/
@@ -79,47 +98,64 @@
             padding-top:20px;
         }
 
-        .TwitchVideo{
-            width: var(--VIDEO_WIDTH);
-            height: var(--VIDEO_HEIGHT);
-        }
-
-        .TwitchChat{
-            width: var(--CHAT_WIDTH);
-            height: var(--VIDEO_HEIGHT);
-        }
-
-
+        /*すべての iframe にサイズ変数を適用*/
         iframe{
             border:none;        /*枠線を消してすっきりさせる*/
             color-scheme:dark;
         }
-
+        .TwitchVideo{
+            width: var(--VIDEO_WIDTH);
+            height: var(--VIDEO_HEIGHT);
+        }
+        .TwitchChat{
+            width: var(--CHAT_WIDTH);
+            height: var(--VIDEO_HEIGHT);
+        }
     </style>
 </head>
 <body>
 
-    <h1>純 Twitch</h1>
-    <p>ver:2.0.7</p>
-
-    
+    <h1>まっど純</h1>
+    <p>ver:2.0.8</p>
 
     <!--配信者を入力するフォーム（2画面分）-->
     <div class="InputArea">
         <h3>配信者の変更</h3>
+
         <!--１画面目-->
         <div class="InputGourp">
+            <!--配信者入力ボタン-->
             <label>1画面目：</label>
             <input type="text" id="streamer-id-1" value="kato_junichi0817" placeholder="配信者のIDを入力" />
-            <button onclick="ChangeStreamer(1)">適用</button>
+            <button class="ApplyButton" onclick="ChangeStreamer(1)">変更</button>
+
+            <!--お気に入りボタン-->
+            <div class="FavoriteButtons">
+                <button class="FavoriteButton" onclick="SetFavorite(1, 'kato_junichi0817')">加藤純一</button>
+                <button class="FavoriteButton" onclick="SetFavorite(1, 'fps_shaka')">SHAKA</button>
+                <button class="FavoriteButton" onclick="SetFavorite(1, 'stylishnoob4')">関優太</button>
+                <button class="FavoriteButton" onclick="SetFavorite(1, 'batora324')">バトラ</button>
+                <button class="FavoriteButton" onclick="SetFavorite(1, 'fmlch')">UK</button>
+            </div>
         </div>
+
         <!--２画面目-->
         <div class="InputGourp">
             <label>2画面目：</label>
             <input type="text" id="streamer-id-2" value="hanjoudesu" placeholder="配信者のIDを入力" />
-            <button onclick="ChangeStreamer(2)">適用</button>
+            <button class="ApplyButton" onclick="ChangeStreamer(2)">変更</button>
+
+            <!--お気に入りボタン-->
+            <div class="FavoriteButtons">
+                <button class="FavoriteButton" onclick="SetFavorite(2, 'kato_junichi0817')">加藤純一</button>
+                <button class="FavoriteButton" onclick="SetFavorite(2, 'fps_shaka')">SHAKA</button>
+                <button class="FavoriteButton" onclick="SetFavorite(2, 'stylishnoob4')">関優太</button>
+                <button class="FavoriteButton" onclick="SetFavorite(2, 'batora324')">バトラ</button>
+                <button class="FavoriteButton" onclick="SetFavorite(2, 'fmlch')">UK</button>
+            </div>
         </div>
-    </div>
+
+    </div> <!--InputArea-->
 
     <!--表示エリア-->
     <div id="MultiviewWrapper">
@@ -173,6 +209,17 @@
     
     <!--ボタンが押されたときにURLを書き換える処理-->
     <script>
+
+        // お気に入りボタンが押されたときの動作
+        function SetFavorite(windowNum, streamerId){
+            // 指定した画面のインプットボックスにIDを自動入力
+            document.getElementById('streamer-id-' + windowNum).value = streamerId;
+
+            // 「変更ボタン」を押した扱いにする
+            ChangeStreamer(windowNum);
+        }
+
+        // 配信者変更ボタンが押されたときの動作
         function ChangeStreamer(windowNum){
             // 入力フォームに入力された文字（ID）を読み取る
             let inputValue = document.getElementById('streamer-id-1').value;
