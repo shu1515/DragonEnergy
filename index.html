@@ -59,6 +59,15 @@
             padding-top:20px;
         }
 
+        DebugLog{
+            background-color: #ff4500;
+            color: white;
+            border: none;
+            border-radius:4px;
+            cursor:pointer;
+            font-weight: hold;
+        }
+
         iframe{
             border:none;        /*枠線を消してすっきりさせる*/
             color-scheme:dark;
@@ -68,7 +77,11 @@
 <body>
 
     <h1>純 Twitch</h1>
-    <p>ver:2.0.1</p>
+    <p>ver:2.0.2</p>
+
+    <div id="debug-display" class="DebugLog">
+        テスト状況：まだボタンは押されていない
+    </div>
 
     <!--配信者を入力するフォーム（2画面分）-->
     <div class="InputArea">
@@ -127,9 +140,14 @@
     <!--ボタンが押されたときにURLを書き換える処理-->
     <script>
         function ChangeStreamer(windowNum){
+
+            const debugLog = document.getElementById('debug-display');
+
+            debugLog.innerText = "ボタンが押された" + windowNum;
+
             // 入力フォームに入力された文字（ID）を読み取る
             let inputValue = document.getElementById('streamer-id-1').value;
-            if(windowNum === 2){
+            if(windowNum == 2){
                 inputValue = document.getElementById('streamer-id-2').value;
             }
 
@@ -138,6 +156,8 @@
             if(streamerId.includes('twitch.tv/')){
                 streamerId = streamerId.split('twitch.tv/')[1].split('?')[0].split('/')[0];
             }
+
+            debugLog.innerText = "streamerId" + streamerId;
 
             // 何も入力がない場合は処理しない
             if(!streamerId){
@@ -151,6 +171,9 @@
 
             document.getElementById('video-'+ windowNum).src = newVideoUrl;
             document.getElementById('chat-'+ windowNum).src = newChatUrl;
+
+            debugLog.innerText = "newVideoUrl" + newVideoUrl;
+            debugLog.innerText = "newChatUrl" + newChatUrl;
         }
 
     </script>
