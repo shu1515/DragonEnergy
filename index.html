@@ -68,7 +68,7 @@
 <body>
 
     <h1>純 Twitch</h1>
-    <p>ver:2.0.0</p>
+    <p>ver:2.0.1</p>
 
     <!--配信者を入力するフォーム（2画面分）-->
     <div class="InputArea">
@@ -77,13 +77,13 @@
         <div class="InputGourp">
             <label>1画面目：</label>
             <input type="text" id="streamer-id-1" value="kato_junichi0817" placeholder="配信者のIDを入力" />
-            <button onclicek="changeStreamer(1)">適用</button>
+            <button onclicek="ChangeStreamer(1)">適用</button>
         </div>
         <!--２画面目-->
         <div class="InputGourp">
             <label>2画面目：</label>
             <input type="text" id="streamer-id-2" value="twitch" placeholder="配信者のIDを入力" />
-            <button onclicek="changeStreamer(2)">適用</button>
+            <button onclicek="ChangeStreamer(2)">適用</button>
         </div>
     </div>
 
@@ -118,7 +118,7 @@
         </iframe>
         <!--チャット欄-->
         <iframe id="chat-2"
-                src="https://www.twitch.tv"
+                src="https://www.twitch.tv/embed/stylishnoob4/chat?darkpopout=true&parent=shu1515.github.io"
                 height="378"
                 width="400">
         </iframe>
