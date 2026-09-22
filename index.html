@@ -169,7 +169,7 @@
 <body>
 
     <h1>まどっち</h1>
-    <p>ver:2.1.3</p>
+    <p>ver:2.1.4</p>
 
     <!--配信者を入力するフォーム（2画面分）-->
     <div class="InputArea">
@@ -239,7 +239,7 @@
                 <iframe
                     id="chat-2"
                     class="TwitchChat"
-                    src="https://www.twitch.tv/embed/stylishnoob4/chat?darkpopout=true&parent=shu1515.github.io"
+                    src="https://www.twitch.tv/embed/fmlch/chat?darkpopout=true&parent=shu1515.github.io"
                     height=WINDOW_HEIGHT
                     width=CHAT_WIDTH>
                 </iframe>
@@ -247,7 +247,7 @@
                 <iframe 
                     id="video-2"
                     class="TwitchVideo"
-                    src="https://player.twitch.tv/?channel=stylishnoob4&parent=shu1515.github.io&autoplay=true"
+                    src="https://player.twitch.tv/?channel=fmlch&parent=shu1515.github.io&autoplay=true"
                     height=WINDOW_HEIGHT
                     width=WINDOW_WIDTH
                     allowfullscreen>
@@ -270,7 +270,6 @@
 
         // 最初から登録しておくデフォルトのお気に入りリスト
         const defaultFavorites=[
-            {name:"加藤純一", id:"kato_junichi0817"},
             {name:"UK", id:"fmlch"}
         ];
 
@@ -301,14 +300,14 @@
                 const button1 = document.createElement('button');
                 button1.className = 'FavoriteButton';
                 button1.innerText = item.name;
-                button1.onclick = function() { setFavorite(1, item.id); };
+                button1.onclick = function() { SetFavorite(1, item.id); };
                 container1.appendChild(button1);
 
                 // 2画面目用のボタン生成
                 const button2 = document.createElement('button');
                 button2.className = 'FavoriteButton';
                 button2.innerText = item.name;
-                button2.onclick = function() { setFavorite(2, item.id); };
+                button2.onclick = function() { SetFavorite(2, item.id); };
                 container2.appendChild(button2);
             });
         }
