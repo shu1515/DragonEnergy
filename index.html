@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="utf-8">
-    <title>まっど純</title>
+    <title>まどっち</title>
     <style>
 
         /*配信画面・コメント欄のサイズ定義*/
@@ -18,11 +18,11 @@
             background-color:#121212;   /*背景：高級感のある黒*/
             color:#ffffff;              /*文字：白*/
             font-family:sans-serif;       /*文字フォント：ゴシック体*/
-            padding:20px;
+            padding:10px;
         }
 
         /*入力エリアのデザイン*/
-        InputArea{
+        .InputArea{
             background-color:#1f1f23;
             padding:15px;
             border-radius:8px;
@@ -30,13 +30,13 @@
             max-width:1000px;
         }
 
-        InputGroup{
+        .InputGroup{
             margin-bottom:10px;
         }
 
         input{
             padding:8px;
-            width:250px;
+            width:200px;
             border-radius:4px;
             border:1px solid #464649;
             background-color:#0e0e10;
@@ -46,8 +46,8 @@
         /*変更ボタン*/
         .ApplyButton{
             padding:8px 15px;
-            background-color:#9135ff; /*Twitchカラーに寄せている*/
-            color:white;
+            background-color:#9135ff;   /*Twitchカラーに寄せている*/
+            color:white;                /*文字カラー*/
             border:none;
             border-radius:4px;
             cursor:pointer;
@@ -71,6 +71,25 @@
         .ChatButton:hover{
             background-color: #fcbf49;
             color: #000000;
+        }
+
+        /*お気に入りフォーム*/
+        .FavoriteAddButtonArea{
+            border-top:1px solid #3a3a3d;
+            padding-top:15px;
+            margin-top:15px;
+        }
+        .FavoriteAddButton{
+            padding:8px 15px;
+            background-color: #00b4d8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .FavoriteAddButton:hover{
+            background-color: #0096c7;
         }
 
         /*お気に入りボタン*/
@@ -149,8 +168,8 @@
 </head>
 <body>
 
-    <h1>まっど純</h1>
-    <p>ver:2.1.2</p>
+    <h1>まどっち</h1>
+    <p>ver:2.1.3</p>
 
     <!--配信者を入力するフォーム（2画面分）-->
     <div class="InputArea">
@@ -164,15 +183,7 @@
             <input type="text" id="streamer-id-1" value="kato_junichi0817" placeholder="配信者のIDを入力" />
             <button class="ApplyButton" onclick="ChangeStreamer(1)">変更</button>
             <button class="ChatButton" onclick="SwitchChatDisplay(1)">💬</button>
-
-            <!--お気に入りボタン-->
-            <div class="FavoriteButtons">
-                <button class="FavoriteButton" onclick="SetFavorite(1, 'kato_junichi0817')">加藤純一</button>
-                <button class="FavoriteButton" onclick="SetFavorite(1, 'fps_shaka')">SHAKA</button>
-                <button class="FavoriteButton" onclick="SetFavorite(1, 'stylishnoob4')">関優太</button>
-                <button class="FavoriteButton" onclick="SetFavorite(1, 'batora324')">バトラ</button>
-                <button class="FavoriteButton" onclick="SetFavorite(1, 'fmlch')">UK</button>
-            </div>
+            <div id="FavContainer1" class="FavoriteButtons"></div>
         </div>
 
         <!--２画面目-->
@@ -181,15 +192,16 @@
             <input type="text" id="streamer-id-2" value="hanjoudesu" placeholder="配信者のIDを入力" />
             <button class="ApplyButton" onclick="ChangeStreamer(2)">変更</button>
             <button class="ChatButton" onclick="SwitchChatDisplay(2)">💬</button>
+            <div id="FavContainer2" class="FavoriteButtons"></div>
+        </div>
 
-            <!--お気に入りボタン-->
-            <div class="FavoriteButtons">
-                <button class="FavoriteButton" onclick="SetFavorite(2, 'kato_junichi0817')">加藤純一</button>
-                <button class="FavoriteButton" onclick="SetFavorite(2, 'fps_shaka')">SHAKA</button>
-                <button class="FavoriteButton" onclick="SetFavorite(2, 'stylishnoob4')">関優太</button>
-                <button class="FavoriteButton" onclick="SetFavorite(2, 'batora324')">バトラ</button>
-                <button class="FavoriteButton" onclick="SetFavorite(2, 'fmlch')">UK</button>
-            </div>
+        <!--お気に入りボタンを追加するフォーム-->
+        <div class="FavoriteAddButtonArea">
+            <h4>ショートカットボタンの登録・リセット</h4>
+            <input type="text" id="new-fav-name" placeholder="表示名">
+            <input type="text" id="new-fav-id" placeholder="TwitchのID(or URL)">
+            <button class="FavoriteAddButton" onclick="AddNewFavorite()">ショートカット登録</button>
+            <button class="FavoriteButton" style="margin-left: 20px; background-color: #d90429;" onclick="ResetFavorites()">リセット</button>
         </div>
 
     </div> <!--InputArea-->
@@ -255,6 +267,99 @@
     
     <!--ボタンが押されたときにURLを書き換える処理-->
     <script>
+
+        // 最初から登録しておくデフォルトのお気に入りリスト
+        const defaultFavorites=[
+            {name:"加藤純一", id:"kato_junichi0817"},
+            {name:"UK", id:"fmlch"}
+        ];
+
+        // ページを読み込んだ時に実行する処理
+        window.onload = function(){
+            RenderFavorites();
+        }
+
+        // 保存されたデータからお気に入りボタンを表示する処理
+        function RenderFavorites(){
+            // ブラウザの LocalStorage からデータを読み込む
+            // データがなければデフォルトのデータを使用
+            let favorites = JSON.parse(localStorage.getItem('TwitchFavs'));
+            if(!favorites){
+                favorites = defaultFavorites;
+                localStorage.setItem('TwitchFavs', JSON.stringify(favorites));
+            }
+
+            // ボタンエリアの初期化
+            const container1 = document.getElementById('FavContainer1')
+            const container2 = document.getElementById('FavContainer2')
+            container1.innerHTML = '';
+            container2.innerHTML = '';
+
+            // 読み込んだリストの分だけボタンを動的生成
+            favorites.forEach(function(item) {
+                // 1画面目用のボタン生成
+                const button1 = document.createElement('button');
+                button1.className = 'FavoriteButton';
+                button1.innerText = item.name;
+                button1.onclick = function() { setFavorite(1, item.id); };
+                container1.appendChild(button1);
+
+                // 2画面目用のボタン生成
+                const button2 = document.createElement('button');
+                button2.className = 'FavoriteButton';
+                button2.innerText = item.name;
+                button2.onclick = function() { setFavorite(2, item.id); };
+                container2.appendChild(button2);
+            });
+        }
+
+        // 新しいボタンを追加したときの処理
+        function AddNewFavorite() {
+            const nameInput = document.getElementById('new-fav-name');
+            const idInput = document.getElementById('new-fav-id');
+
+            const streamerName = nameInput.value.trim();
+            let streamerId = idInput.value.trim();
+            if(!streamerName || !streamerId) {
+                alert('名前とTwitchIDをそれぞれ入力してください');
+                return;
+            }
+
+            // URLが入力された場合、ID部分のみを抜き取る処理
+            if(streamerId.includes('twitch.tv/')){
+                streamerId = streamerId.split('twitch.tv/')[1].split('?')[0].split('/')[0];
+            }
+
+            // 現在のリストを読み込み、新しいお気に入りを追加する
+            let favorites = JSON.parse(localStorage.getItem('TwitchFavs')) || defaultFavorites;
+            const isExist = favorites.some(item => item.id.toLowerCase() === streamerId.toLowerCase());
+
+            // 配信者IDが重複している場合は警告表示
+            if(isExist) {
+                alert('「' + streamerId + '」は既に登録されているため、登録できませんでした。');
+                return;
+            }
+
+            favorites.push({ name: streamerName, id: streamerId});
+
+            // LocalStorage への書き込み
+            localStorage.setItem('TwitchFavs', JSON.stringify(favorites));
+
+            // 入力欄を空へ
+            nameInput.value = '';
+            idInput.value = '';
+
+            // ボタンの見た目を更新
+            RenderFavorites();
+        }
+
+        // ボタンをリセットする処理
+        function ResetFavorites() {
+            if(confirm('ショートカットをリセットしますか？')) {
+                localStorage.removeItem('TwitchFavs');
+                RenderFavorites();
+            }
+        }
 
         // チャット表示切り替えボタンが押されたときの動作
         function SwitchChatDisplay(windowNum){
