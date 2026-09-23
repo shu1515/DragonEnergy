@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8">
     <title>まどっち</title>
+    <link rel="icon" href="favicon.png">
+    
     <style>
 
         /*配信画面・コメント欄のサイズ定義*/
@@ -15,9 +17,14 @@
 
         /*サイト全体のデザイン*/
         body{
-            background-color:#121212;   /*背景：高級感のある黒*/
-            color:#ffffff;              /*文字：白*/
-            font-family:sans-serif;       /*文字フォント：ゴシック体*/
+            background-image: linear-gradient(rgba(18, 18 ,18, 0.85), rgba(18, 18 ,18, 0.85)), url("favicon.png");
+            background-size: contain;         /*画面全体にぴったりフィットさせる*/
+            background-position: center;    /*画像の中心をサイトの中心に*/
+            background-attachment: fixed;   /*スクロールしても画像の位置は固定*/
+
+            background-color: #1f1f23;
+            color:#ffffff;                /*文字：白*/
+            font-family:sans-serif;         /*文字フォント：ゴシック体*/
             padding:10px;
         }
 
@@ -171,7 +178,9 @@
     <h1>まどっち</h1>
     <h3>更新履歴</h3>
     <p>ver:2.1.5</p>
-    <p>　・ページを再読み込み時、最後の配信を表示するように修正</p>
+    <p>　・ページを再読み込み時、最後に表示していた配信を再表示するように修正</p>
+    <p>ver:2.1.6</p>
+    <p>　・アイコン・背景画像を設定</p>
 
     <!--配信者を入力するフォーム（2画面分）-->
     <div class="InputArea">
