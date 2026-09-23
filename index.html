@@ -169,7 +169,9 @@
 <body>
 
     <h1>まどっち</h1>
-    <p>ver:2.1.4</p>
+    <h3>更新履歴</h3>
+    <p>ver:2.1.5</p>
+    <p>　・ページを再読み込み時、最後の配信を表示するように修正</p>
 
     <!--配信者を入力するフォーム（2画面分）-->
     <div class="InputArea">
@@ -258,7 +260,6 @@
 
     <h3>以下、気が向いたら実装</h3>
     <p>・シアターモード（不要なUIを非表示に）</p>
-    <p>・任意の配信者をショートカットキーに登録</p>
     <p>・１～４の可変窓</p>
     <p>・音声出力先の変更（窓ごとに出力先を変えるのはさすがに厳しい？）</p>
     <p>・ショートカットキー登録中の配信者の配信中表示（難易度高）</p>
@@ -273,9 +274,18 @@
             {name:"UK", id:"fmlch"}
         ];
 
+        // 最初から登録しておくデフォルトのチャンネル
+        const DefaultStreamers=[
+            {id:"kato_junichi0817"},
+            {id:"fmlch"}
+        ];
+
         // ページを読み込んだ時に実行する処理
         window.onload = function(){
             RenderFavorites();
+
+            // デフォルトの配信者を設定
+            SetInitializeStreamers();
         }
 
         // 保存されたデータからお気に入りボタンを表示する処理
@@ -404,7 +414,36 @@
 
             document.getElementById('video-'+ windowNum).src = newVideoUrl;
             document.getElementById('chat-'+ windowNum).src = newChatUrl;
+
+            // LocalStorage で保持している視聴中の配信者IDを更新
+            var defaultStreamers = JSON.parse(localStorage.getItem('DefaultStreamers'));
+            var index = windowNum - 1;
+            defaultStreamers[index].id = streamerId;
+
+            // LocalStorage も更新
+            let newStreamers = JSON.stringify(defaultStreamers);
+            localStorage.setItem('DefaultStreamers', newStreamers);
         }
+
+        // ページ開始時に配信者を設定する処理
+        function SetInitializeStreamers(streamers) {
+            // デフォルト表示の配信者IDを取得
+            let defaultStreamers = JSON.parse(localStorage.getItem('DefaultStreamers'));
+            if(!defaultStreamers) {
+                defaultStreamers = DefaultStreamers;
+                localStorage.setItem('DefaultStreamers', JSON.stringify(defaultStreamers));
+            }
+
+            // 対象の iframe を新しく作り変える
+            for(var count = 0; count < defaultStreamers.length; count++) {
+                const newVideoUrl = "https://player.twitch.tv/?channel=" + defaultStreamers[count].id + "&parent=shu1515.github.io&autoplayer=true";
+                const newChatUrl = "https://www.twitch.tv/embed/" + defaultStreamers[count].id + "/chat?darkpopout=true&parent=shu1515.github.io";
+                let windowNum = count + 1;
+                document.getElementById('video-'+ windowNum).src = newVideoUrl;
+                document.getElementById('chat-'+ windowNum).src = newChatUrl;
+            };
+        }
+
 
     </script>
 
