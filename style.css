@@ -1,0 +1,48 @@
+/* 配信画面全体を囲む親要素 */
+.MultiviewWrapper  {
+  display: flex;
+  flex-wrap: wrap;       /* 画面が狭くなったら自動で縦並びにする */
+  gap: 16px;             /* 1画面目と2画面目の間のすき間 */
+  width: 100%;           /* ウィンドウ幅いっぱいに広げる */
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+/* 各配信画面（1枠分）のブロック */
+.WindowBlock  {
+  flex: 1 1 45%;         /* 2画面並んだときに均等に広がる */
+  min-width: 450px;      /* スマホなどで小さくなりすぎない限界値 */
+
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  background-color: #18181b;
+  padding: 8px;
+  border-radius: 6px;
+}
+/*配信画面の設定*/
+.WindowBlock.StreamVideoArea{
+    flex: 3;
+    width: 0;
+}
+/*動画のiframe*/
+.WindowBlock.StreamVideoArea iframe {
+  width: 100% !important;   /* 横幅を親要素に合わせる */
+  height: auto !important;  /* 高さはアスペクト比に任せる */
+  aspect-ratio: 16 / 9;     /* ★常に16:9の比率を維持する */
+  border: none;
+  display: block;
+}
+/*コメント欄の設定*/
+.WindowBlock.StreamChatArea{
+    flex: 1;
+    width: 0;
+    display: flex;
+}
+/*コメント欄のiframe*/
+.WindowBlock.StreamChatArea iframe {
+    width: 100% !important;
+    height: 100% !important;
+    border: none;
+    display: block;
+}

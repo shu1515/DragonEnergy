@@ -3,7 +3,10 @@
 <head>
     <meta charset="utf-8">
     <title>まどっち</title>
+
+    <!--ファイル読み込み-->
     <link rel="icon" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
     
     <style>
 
@@ -248,16 +251,8 @@
         <!--窓１-->
         <div class="WindowBlock">
             <h2>1画面目</h2>
-            <div class="TwitchContainer">
-                <!--チャット欄-->
-                <iframe 
-                    id="chat-1"
-                    class="TwitchChat"
-                    src="https://www.twitch.tv/embed/kato_junichi0817/chat?darkpopout=true&parent=shu1515.github.io"
-                    height=WINDOW_HEIGHT
-                    width=CHAT_WIDTH>
-                </iframe>
-                <!--プレイヤー-->
+            <!--プレイヤー-->
+            <div class="StreamVideoArea">
                 <iframe 
                     id="video-1"
                     class="TwitchVideo"
@@ -267,20 +262,22 @@
                     allowfullscreen>
                 </iframe>
             </div>
+            <!--チャット欄-->
+            <div class=""> 
+                <iframe 
+                    id="chat-1"
+                    class="TwitchChat"
+                    src="https://www.twitch.tv/embed/kato_junichi0817/chat?darkpopout=true&parent=shu1515.github.io"
+                    height=WINDOW_HEIGHT
+                    width=CHAT_WIDTH>
+                </iframe>
+            </div>
         </div>
         <!--窓２-->
         <div class="WindowBlock">
             <h2>2画面目</h2>
-            <div class="TwitchContainer">
-                <!--チャット欄-->
-                <iframe
-                    id="chat-2"
-                    class="TwitchChat"
-                    src="https://www.twitch.tv/embed/fmlch/chat?darkpopout=true&parent=shu1515.github.io"
-                    height=WINDOW_HEIGHT
-                    width=CHAT_WIDTH>
-                </iframe>
-                <!--プレイヤー-->
+             <!--プレイヤー-->
+            <div class="StreamVideoArea">
                 <iframe 
                     id="video-2"
                     class="TwitchVideo"
@@ -290,9 +287,19 @@
                     allowfullscreen>
                 </iframe>
             </div>
+            <!--チャット欄-->
+            <div class="StreamVideoArea">
+                <iframe
+                    id="chat-2"
+                    class="TwitchChat"
+                    src="https://www.twitch.tv/embed/fmlch/chat?darkpopout=true&parent=shu1515.github.io"
+                    height=WINDOW_HEIGHT
+                    width=CHAT_WIDTH>
+                </iframe>
+            </div>
         </div>
 
-        /*画面右下にアイコン表示*/
+        <!--画面右下にアイコン表示-->
         <img src="favicon.png" alt="favicon" class="MadocchiIcon">
 
     </div><!--MultiviewWrapper-->
