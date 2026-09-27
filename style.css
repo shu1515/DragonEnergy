@@ -1,5 +1,12 @@
+
+@charset "UTF-8";
+
+/* ==========================================================================
+   配信画面レイアウト（まどっち レresponsive対応版）
+   ========================================================================== */
+
 /* 配信画面全体を囲む親要素 */
-.MultiviewWrapper  {
+#MultiviewWrapper  {
   display: flex;
   flex-wrap: wrap;       /* 画面が狭くなったら自動で縦並びにする */
   gap: 16px;             /* 1画面目と2画面目の間のすき間 */
@@ -9,40 +16,60 @@
 }
 
 /* 各配信画面（1枠分）のブロック */
-.WindowBlock  {
+WindowBlock  {
   flex: 1 1 45%;         /* 2画面並んだときに均等に広がる */
   min-width: 450px;      /* スマホなどで小さくなりすぎない限界値 */
-
   display: flex;
-  flex-direction: row;
-  gap: 8px;
+  flex-direction: column;
   background-color: #18181b;
   padding: 8px;
   border-radius: 6px;
+  box-sizing: border-box;
 }
-/*配信画面の設定*/
-.WindowBlock.StreamVideoArea{
-    flex: 3;
-    width: 0;
+
+ /* 動画とチャットを横並びにする設定 */
+TwitchContainer {
+    display: flex;         /* 動画とチャットを横並びに */
+    gap: 8px;              /* 動画とチャットの隙間 */
+    width: 100%;
+    max-width: 1920px;     /* 全体の横幅の限界 */
+    margin-bottom: 30px;
+    border-top: 1px solid #2f2f35;
+    padding-top: 20px;
 }
-/*動画のiframe*/
-.WindowBlock.StreamVideoArea iframe {
-  width: 100% !important;   /* 横幅を親要素に合わせる */
-  height: auto !important;  /* 高さはアスペクト比に任せる */
-  aspect-ratio: 16 / 9;     /* ★常に16:9の比率を維持する */
-  border: none;
-  display: block;
+
+/* すべての iframe の共通設定 */
+iframe {
+    border: none;          /* 枠線を消してすっきりさせる */
+    color-scheme: dark;
+    transition: all 0.2s ease; /* 閉じる・広がる動きを滑らかにする */
 }
-/*コメント欄の設定*/
-.WindowBlock.StreamChatArea{
-    flex: 1;
-    width: 0;
-    display: flex;
-}
-/*コメント欄のiframe*/
-.WindowBlock.StreamChatArea iframe {
-    width: 100% !important;
-    height: 100% !important;
-    border: none;
+
+/* 【通常時の動画】全体の約75%の横幅を割り当てる */
+.TwitchVideo {
+    flex: 3;                 
+    width: 0;                /* 横幅計算をFlexboxの比率に委ねる */
+    height: auto !important; /* 高さはアスペクト比に任せる */
+    aspect-ratio: 16 / 9;    /* ウィンドウサイズが変わっても16:9を維持 */
     display: block;
+}
+
+/* 【通常時のチャット欄】全体の約25%の横幅に固定 */
+.TwitchChat {
+    flex: 1;                 
+    width: 0;                /* 横幅計算をFlexboxの比率に委ねる */
+    height: auto !important; /* 動画の16:9の高さにぴったり合わせる */
+    aspect-ratio: 350 / 600; /* チャット欄として見やすい縦長比率を維持 */
+    opacity: 1;
+    display: block;
+}
+
+/* 【非表示時】チャット欄を完全に消す */
+.TwitchChat.IsHidden {
+    flex: 0 !important;      /* 占有幅をゼロにする */
+    width: 0px !important;   
+    opacity: 0 !important;   /* 透明化 */
+    pointer-events: none;    /* クリック不可 */
+    margin: 0 !important;
+    padding: 0 !important;
 }

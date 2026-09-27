@@ -29,14 +29,6 @@
             margin-bottom: 10px;
         }
 
-        /*配信画面・コメント欄のサイズ定義*/
-        :root{
-            --VIDEO_HEIGHT:700px;           /*配信画面：高さ*/
-            --VIDEO_WIDTH:600px;            /*配信画面：幅*/
-            --CHAT_WIDTH:300px;             /*チャット：幅*/
-            --VIDEO_CHAT_GAP_WIDTH:2px;    /*動画とチャットのすき間*/
-        }
-
         /*サイト全体のデザイン*/
         body{
             background-image: linear-gradient(rgba(18, 18 ,18, 0.85), rgba(18, 18 ,18, 0.85)), url("favicon.png");
@@ -140,57 +132,65 @@
             background-color: #464649;
         }
 
-        /*配信画面を横並びにするための設定*/
-        #MultiviewWrapper{
-            display:flex;
-            flex-wrap:wrap; /*画面幅が足りないときは下に落ちる*/
-            gap:30px;       /*窓の隙間*/
-        }
+        /* ==========================================================================
+           【最新】配信画面レイアウト（自動伸縮・チャット非表示連動）
+           ========================================================================== */
 
-        /*タイトル・配信画面を縦に並べる設定*/
-        WindowBlock{
+        /* 配信画面全体を囲む親要素 */
+        #MultiviewWrapper {
             display: flex;
-            flex-direction:column;  /*タイトル・配信画面を縦に並べる*/
+            flex-wrap: wrap;       /* 画面が狭くなったら自動で縦並びにする */
+            gap: 16px;             /* 1画面目と2画面目の間のすき間 */
+            width: 100%;           /* ウィンドウ幅いっぱいに広げる */
+            box-sizing: border-box;
+            padding: 10px;
         }
 
-        /*動画とチャットを横並びにする設定*/
-        TwitchContainer{
-            display:flex;           /*横並びに*/
-            gap:var(--gap-width);   /*動画とチャットの隙間*/
-            max-width:1920px;   /*全体の横幅の限界*/
-            margin-bottom:30px;
-            border-top:1px solid #2f2f35;
-            padding-top:20px;
+        /* 各配信画面（1枠分）のブロック */
+        .WindowBlock {
+            flex: 1 1 45%;         /* 2画面並んだときに均等に広がる */
+            min-width: 450px;      /* スマホなどで小さくなりすぎない限界値 */
+            display: flex;
+            flex-direction: row;   /* 動画とチャットを横並びにする */
+            gap: 8px;              /* 動画とチャットの隙間 */
+            background-color: #18181b;
+            padding: 8px;
+            border-radius: 6px;
+            box-sizing: border-box;
         }
 
-        /*すべての iframe にサイズ変数を適用*/
-        iframe{
-            border:none;        /*枠線を消してすっきりさせる*/
-            color-scheme:dark;
-            transition:width 0.2s, opacity 0.2s;
+        /* すべての iframe の共通設定 */
+        iframe {
+            border: none;          /* 枠線を消す */
+            color-scheme: dark;
+            transition: all 0.2s ease; /* 閉じる・広がる動きを滑らかにする */
         }
 
-        /*通常時のビデオサイズ*/
-        .TwitchVideo{
-            width: var(--VIDEO_WIDTH);
-            height: var(--VIDEO_HEIGHT);
+        /* 【通常時の動画】全体の約75%の横幅を割り当てる */
+        .TwitchVideo {
+            flex: 3;                 
+            width: 0;                /* 横幅計算をFlexboxの比率に委ねる */
+            height: auto !important; /* 高さはアスペクト比に任せる */
+            aspect-ratio: 16 / 9;    /* ウィンドウサイズが変わっても16:9を維持 */
+            display: block;
         }
-        /*通常時のチャット欄サイズ*/
-        .TwitchChat{
-            width: var(--CHAT_WIDTH);
-            height: var(--VIDEO_HEIGHT);
-            opacity:1;
+
+        /* 【通常時のチャット欄】全体の約25%の横幅に固定 */
+        .TwitchChat {
+            flex: 1;                 
+            width: 0;                /* 横幅計算をFlexboxの比率に委ねる */
+            height: auto !important; 
+            aspect-ratio: 350 / 550; /* チャット欄として見やすい縦長比率 */
+            opacity: 1;
+            display: block;
         }
-        /*非表示時のチャット欄サイズ*/
-        .TwitchChat.IsHidden{
-            width: 0px !important;  /*横幅を０に*/
-            opacity: 0 !important;  /*完全に透明化*/
-            pointer-events: none;   /*クリック不可へ*/
-        }
-        /*チャット欄非表示時のビデオサイズ*/
-        .TwitchChat.IsHidden~.TwitchVideo{
-            /*チャット欄が非表示時の際にビデオサイズの横幅を広げている*/
-            width: calc(var(--VIDEO_WIDTH) + var(--VIDEO_CHAT_GAP_WIDTH) + var(--CHAT_WIDTH)) !important;
+
+        /* 【非表示時】チャット欄を完全に消す（横幅が0になり、動画がその分広がります） */
+        .TwitchChat.IsHidden {
+            flex: 0 !important;      /* 占有幅をゼロにする */
+            width: 0px !important;   
+            opacity: 0 !important;   /* 透明化 */
+            pointer-events: none;    /* クリック不可 */
         }
 
     </style>
@@ -202,14 +202,6 @@
         <script language="javascript" type="text/javascript" src="//counter1.fc2.com/counter.php?id=41203776&main=1"></script><noscript><img src="//counter1.fc2.com/counter_img.php?id=41203776&main=1" /></noscript>
     <!-- オンラインカウンター -->
         現在の閲覧者数:<script language="javascript" type="text/javascript" src="//counter1.fc2.com/views.php?id=41203776&main=1"></script><noscript><img src="//counter1.fc2.com/counter_now.php?id=41203776&main=1" /></noscript>
-
-    <h3>更新履歴</h3>
-    <p>ver:2.1.5</p>
-    <p>　・ページを再読み込み時、最後に表示していた配信を再表示するように修正</p>
-    <p>ver:2.1.6</p>
-    <p>　・アイコン・背景画像を設定</p>
-    <p>ver:2.1.7</p>
-    <p>　・アクセスカウンターの追加</p>
 
     <!--配信者を入力するフォーム（2画面分）-->
     <div class="InputArea">
@@ -250,59 +242,51 @@
     <div id="MultiviewWrapper">
         <!--窓１-->
         <div class="WindowBlock">
-            <h2>1画面目</h2>
             <!--プレイヤー-->
-            <div class="StreamVideoArea">
-                <iframe 
-                    id="video-1"
-                    class="TwitchVideo"
-                    src="https://player.twitch.tv/?channel=kato_junichi0817&parent=shu1515.github.io&autoplay=true"
-                    height=WINDOW_HEIGHT
-                    width=WINDOW_WIDTH
-                    allowfullscreen>
-                </iframe>
-            </div>
+            <iframe 
+                id="video-1"
+                class="TwitchVideo"
+                src="https://player.twitch.tv/?channel=kato_junichi0817&parent=shu1515.github.io&autoplay=true"
+                allowfullscreen>
+            </iframe>
             <!--チャット欄-->
-            <div class=""> 
-                <iframe 
-                    id="chat-1"
-                    class="TwitchChat"
-                    src="https://www.twitch.tv/embed/kato_junichi0817/chat?darkpopout=true&parent=shu1515.github.io"
-                    height=WINDOW_HEIGHT
-                    width=CHAT_WIDTH>
-                </iframe>
-            </div>
+            <iframe 
+                id="chat-1"
+                class="TwitchChat"
+                src="https://www.twitch.tv/embed/kato_junichi0817/chat?darkpopout=true&parent=shu1515.github.io">
+            </iframe>
         </div>
         <!--窓２-->
         <div class="WindowBlock">
-            <h2>2画面目</h2>
              <!--プレイヤー-->
-            <div class="StreamVideoArea">
-                <iframe 
-                    id="video-2"
-                    class="TwitchVideo"
-                    src="https://player.twitch.tv/?channel=fmlch&parent=shu1515.github.io&autoplay=true"
-                    height=WINDOW_HEIGHT
-                    width=WINDOW_WIDTH
-                    allowfullscreen>
-                </iframe>
-            </div>
+             <iframe 
+                 id="video-2"
+                 class="TwitchVideo"
+                 src="https://player.twitch.tv/?channel=fmlch&parent=shu1515.github.io&autoplay=true"
+                 allowfullscreen>
+            </iframe>
             <!--チャット欄-->
-            <div class="StreamVideoArea">
-                <iframe
-                    id="chat-2"
-                    class="TwitchChat"
-                    src="https://www.twitch.tv/embed/fmlch/chat?darkpopout=true&parent=shu1515.github.io"
-                    height=WINDOW_HEIGHT
-                    width=CHAT_WIDTH>
-                </iframe>
-            </div>
+            <iframe
+                id="chat-2"
+                class="TwitchChat"
+                src="https://www.twitch.tv/embed/fmlch/chat?darkpopout=true&parent=shu1515.github.io">
+            </iframe>
         </div>
 
         <!--画面右下にアイコン表示-->
         <img src="favicon.png" alt="favicon" class="MadocchiIcon">
 
     </div><!--MultiviewWrapper-->
+
+    <h3>更新履歴</h3>
+    <p>ver:2.1.5</p>
+    <p>　・ページ読み込みの際、最後に表示していた配信を表示するように修正</p>
+    <p>ver:2.1.6</p>
+    <p>　・アイコン・背景画像を設定</p>
+    <p>ver:2.1.7</p>
+    <p>　・アクセスカウンターを追加</p>
+    <p>ver:2.1.8</p>
+    <p>　・ウィンドウサイズに応じて窓枠のサイズを変更するように対応</p>
 
     <h3>以下、気が向いたら実装</h3>
     <p>・シアターモード（不要なUIを非表示に）</p>
