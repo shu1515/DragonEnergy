@@ -8,27 +8,43 @@
 /* 配信画面全体を囲む親要素 */
 #MultiviewWrapper  {
   display: flex;
-  flex-wrap: wrap;       /* 画面が狭くなったら自動で縦並びにする */
-  gap: 16px;             /* 1画面目と2画面目の間のすき間 */
+  flex-wrap: nowrap;       /* 画面が狭くなったら自動で縦並びにする */
+  gap: 0px;             /* 1画面目と2画面目の間のすき間 */
   width: 100%;           /* ウィンドウ幅いっぱいに広げる */
   box-sizing: border-box;
   padding: 10px;
 }
 
 /* 各配信画面（1枠分）のブロック */
-WindowBlock  {
-  flex: 1 1 45%;         /* 2画面並んだときに均等に広がる */
-  min-width: 450px;      /* スマホなどで小さくなりすぎない限界値 */
+.WindowBlock  {
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: clac(50% - 8px);   /*初期値はほぼ半分（すき間分をマイナス）*/
+  min-width: 300px;       /* 縮められる限界の幅 */
   display: flex;
-  flex-direction: column;
+  flex-direction: row;      /*動画とチャットを横並びに*/
+  gap: 8px;                 /*動画とチャットのすき間*/
   background-color: #18181b;
   padding: 8px;
   border-radius: 6px;
   box-sizing: border-box;
 }
 
+/*ドラッグ用の縦棒のスタイル*/
+.Resizer {
+    width: 8px;                     /*縦棒の反応するエリア*/
+    cursor: col-resize;             /*マウスオーバーレイ時に左右矢印のカーソルにする*/
+    background-color: #2f2f35;    /*棒の色*/
+    border-radius: 4px;
+    align-self: stretch;            /*画面の高さに合わせる*/
+    transition: background-color 0.2s;
+}
+.Resizer:hover, .Resizer:active {
+    background-color: #9135ff;    /*マウスホバー時やドラッグ中はTwitch色に光る*/
+}
+
  /* 動画とチャットを横並びにする設定 */
-TwitchContainer {
+.TwitchContainer {
     display: flex;         /* 動画とチャットを横並びに */
     gap: 8px;              /* 動画とチャットの隙間 */
     width: 100%;
@@ -52,6 +68,12 @@ iframe {
     height: auto !important; /* 高さはアスペクト比に任せる */
     aspect-ratio: 16 / 9;    /* ウィンドウサイズが変わっても16:9を維持 */
     display: block;
+    pointer-events: auto;
+}
+
+/*ドラッグ中に iframe 内のマウス反応を無くして、ドラッグが途切れないようにするクラス*/
+.Dragging iframe {
+    pointer-events: none !important;
 }
 
 /* 【通常時のチャット欄】全体の約25%の横幅に固定 */
@@ -59,7 +81,7 @@ iframe {
     flex: 1;                 
     width: 0;                /* 横幅計算をFlexboxの比率に委ねる */
     height: auto !important; /* 動画の16:9の高さにぴったり合わせる */
-    aspect-ratio: 350 / 600; /* チャット欄として見やすい縦長比率を維持 */
+    aspect-ratio: 350 / 550; /* チャット欄として見やすい縦長比率を維持 */
     opacity: 1;
     display: block;
 }
@@ -70,6 +92,4 @@ iframe {
     width: 0px !important;   
     opacity: 0 !important;   /* 透明化 */
     pointer-events: none;    /* クリック不可 */
-    margin: 0 !important;
-    padding: 0 !important;
 }

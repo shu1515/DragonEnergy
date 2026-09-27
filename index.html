@@ -132,78 +132,20 @@
             background-color: #464649;
         }
 
-        /* ==========================================================================
-           【最新】配信画面レイアウト（自動伸縮・チャット非表示連動）
-           ========================================================================== */
-
-        /* 配信画面全体を囲む親要素 */
-        #MultiviewWrapper {
-            display: flex;
-            flex-wrap: wrap;       /* 画面が狭くなったら自動で縦並びにする */
-            gap: 16px;             /* 1画面目と2画面目の間のすき間 */
-            width: 100%;           /* ウィンドウ幅いっぱいに広げる */
-            box-sizing: border-box;
-            padding: 10px;
-        }
-
-        /* 各配信画面（1枠分）のブロック */
-        .WindowBlock {
-            flex: 1 1 45%;         /* 2画面並んだときに均等に広がる */
-            min-width: 450px;      /* スマホなどで小さくなりすぎない限界値 */
-            display: flex;
-            flex-direction: row;   /* 動画とチャットを横並びにする */
-            gap: 8px;              /* 動画とチャットの隙間 */
-            background-color: #18181b;
-            padding: 8px;
-            border-radius: 6px;
-            box-sizing: border-box;
-        }
-
-        /* すべての iframe の共通設定 */
-        iframe {
-            border: none;          /* 枠線を消す */
-            color-scheme: dark;
-            transition: all 0.2s ease; /* 閉じる・広がる動きを滑らかにする */
-        }
-
-        /* 【通常時の動画】全体の約75%の横幅を割り当てる */
-        .TwitchVideo {
-            flex: 3;                 
-            width: 0;                /* 横幅計算をFlexboxの比率に委ねる */
-            height: auto !important; /* 高さはアスペクト比に任せる */
-            aspect-ratio: 16 / 9;    /* ウィンドウサイズが変わっても16:9を維持 */
-            display: block;
-        }
-
-        /* 【通常時のチャット欄】全体の約25%の横幅に固定 */
-        .TwitchChat {
-            flex: 1;                 
-            width: 0;                /* 横幅計算をFlexboxの比率に委ねる */
-            height: auto !important; 
-            aspect-ratio: 350 / 550; /* チャット欄として見やすい縦長比率 */
-            opacity: 1;
-            display: block;
-        }
-
-        /* 【非表示時】チャット欄を完全に消す（横幅が0になり、動画がその分広がります） */
-        .TwitchChat.IsHidden {
-            flex: 0 !important;      /* 占有幅をゼロにする */
-            width: 0px !important;   
-            opacity: 0 !important;   /* 透明化 */
-            pointer-events: none;    /* クリック不可 */
-        }
-
     </style>
 </head>
 <body>
 
+    <!--タイトル-->
     <h1>まどっち</h1>
     <!-- アクセスカウンター -->
         <script language="javascript" type="text/javascript" src="//counter1.fc2.com/counter.php?id=41203776&main=1"></script><noscript><img src="//counter1.fc2.com/counter_img.php?id=41203776&main=1" /></noscript>
     <!-- オンラインカウンター -->
         現在の閲覧者数:<script language="javascript" type="text/javascript" src="//counter1.fc2.com/views.php?id=41203776&main=1"></script><noscript><img src="//counter1.fc2.com/counter_now.php?id=41203776&main=1" /></noscript>
 
-    <!--配信者を入力するフォーム（2画面分）-->
+    <!--============================================================================
+        配信者を入力するフォーム（2画面分）
+    ============================================================================-->
     <div class="InputArea">
         <h4>配信者の変更</h4>
         <p>　任意の配信者のTwitchID、もしくはTwitchのURLを以下に入力（右側のボタンはショートカット機能）</p>
@@ -238,10 +180,14 @@
 
     </div> <!--InputArea-->
 
-    <!--表示エリア-->
+    <!--============================================================================
+        表示エリア
+    ============================================================================-->
     <div id="MultiviewWrapper">
-        <!--窓１-->
-        <div class="WindowBlock">
+        <!----------
+            窓１
+        ------------>
+        <div class="WindowBlock" id="window-block-1">
             <!--プレイヤー-->
             <iframe 
                 id="video-1"
@@ -256,8 +202,14 @@
                 src="https://www.twitch.tv/embed/kato_junichi0817/chat?darkpopout=true&parent=shu1515.github.io">
             </iframe>
         </div>
-        <!--窓２-->
-        <div class="WindowBlock">
+
+        <!--左右の画面を調整するスプリッター-->
+        <div id="Resizer" class="Resizer"></div>
+
+        <!----------
+            窓２
+        ------------>
+        <div class="WindowBlock" id="window-block-2">
              <!--プレイヤー-->
              <iframe 
                  id="video-2"
@@ -287,6 +239,8 @@
     <p>　・アクセスカウンターを追加</p>
     <p>ver:2.1.8</p>
     <p>　・ウィンドウサイズに応じて窓枠のサイズを変更するように対応</p>
+    <p>ver:2.1.9</p>
+    <p>　・ウィンドウサイズを変更できるスプリッターを追加</p>
 
     <h3>以下、気が向いたら実装</h3>
     <p>・シアターモード（不要なUIを非表示に）</p>
@@ -296,7 +250,9 @@
     <p>・レイアウトサイズや配置をいい感じに調整できるように</p>
     <p>・コメントの弾幕表示</p>
     
-    <!--ボタンが押されたときにURLを書き換える処理-->
+    <!--============================================================================
+        スクリプト
+    ============================================================================-->
     <script>
 
         // 最初から登録しておくデフォルトのお気に入りリスト
@@ -473,6 +429,68 @@
                 document.getElementById('chat-'+ windowNum).src = newChatUrl;
             };
         }
+
+        // 画面幅ドラッグ調整機能（スプリッター）
+        document.addEventListener('DOMContentLoaded', ()=> {
+            const resizer = document.getElementById('Resizer');
+            const leftBlock = document.getElementById('window-block-1');
+            const rightBlock = document.getElementById('window-block-2');
+            const wrapper = document.getElementById('MultiviewWrapper');
+
+            if(!resizer || !leftBlock || !rightBlock || !wrapper) return;
+
+            resizer.addEventListener('mousedown', (e) =>{
+                e.preventDefault();
+
+                // ドラッグ中の iframe の誤作動を防ぐため全体にクラスを付与
+                document.body.classList.add('dragging');
+
+                // ドラッグ開始時のマウス位置と各要素の幅を取得
+                const startX = e.clientX;
+                const leftWidth = leftBlock.getBoundingClientRect().width;
+                const rightWidth = rightBlock.getBoundingClientRect().width;
+                const totalWidth = leftWidth + rightWidth;
+
+                const onMouseMove = (moveEvent) => {
+                    // 移動した距離を計算
+                    const deltaX = moveEvent.clientX - startX;
+
+                    // 新しい幅を計算
+                    let newLeftWidth = leftWidth + deltaX;
+                    let newRightWidth = rightWidth - deltaX;
+
+                    // 最小幅（300px）の制限をかける
+                    if(newLeftWidth < 300) {
+                        newLeftWidth = 300;
+                        newRightWidth = totalWidth - 300;
+                    }
+                    if(newRightWidth < 300) {
+                        newRightWidth = 300;
+                        newLeftWidth = totalWidth - 300;
+                    }
+
+                    // ピクセルではなくパーセンテージに変換して適用（ウィンドウサイズ変更に強くするため）
+                    const leftPercent = (newLeftWidth / totalWidth) * 100;
+                    const rightPercent = (newRightWidth / totalWidth) * 100;
+
+                    // 縦棒の太さ分（8px）を考慮して幅を適用
+                    leftBlock.style.width = `calc(${leftPercent}% - 4px)`;
+                    rightBlock.style.width = `calc(${rightPercent}% - 4px)`;
+                }
+
+                const onMouseUp = () => {
+                    // ドラッグ終了処理
+                    document.body.classList.remove('dragging');
+                    document.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseup', onMouseUp);
+                };
+
+                // マウスの動きを監視開始
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            })
+        })
+
 
 
     </script>
