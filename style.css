@@ -100,6 +100,45 @@ body.dragging #Resizer {
     pointer-events: none;    /* クリック不可 */
 }
 
+/* ==========================================================================
+   画面切り替えコントロール（ボタン用スタイル）
+   ========================================================================== */
+.ViewControls {
+    padding: 10px 10px 0 10px;
+}
+.ViewControls button {
+    background-color: #2f2f35;
+    color: #efeff1;
+    border: none;
+    padding: 8px 16px;
+    margin-right: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+.ViewControls button:hover {
+    background-color: #9135ff;
+}
+
+/* ==========================================================================
+   1画面表示（.SingleView）時のレイアウト調整
+   ========================================================================== */
+/* 1画面時は、窓1の幅を強制的に100%にして全画面化する */
+#MultiviewWrapper.SingleView #window-block-1 {
+  flex-basis: 100% !important;
+  width: 100% !important;
+}
+
+/* 1画面時は、スプリッターと窓2を完全に非表示にする */
+#MultiviewWrapper.SingleView #Resizer,
+#MultiviewWrapper.SingleView #window-block-2 {
+  display: none !important;
+}
+
+/* ==========================================================================
+   テキスト表示スタイル
+   ========================================================================== */
 /*テキストを表示する際のスタイル*/
 .UpdateHistory p {
     margin: 4px 0;      /*上下の不要な余白の調整*/

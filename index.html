@@ -178,6 +178,12 @@
             <button class="FavoriteButton" style="margin-left: 20px; background-color: #d90429;" onclick="ResetFavorites()">リセット</button>
         </div>
 
+        <!--画面数切り替えボタン-->
+        <div class="ViewControls">
+            <button onclick="SwitchView(1)">1画面表示</button>
+            <button onclick="SwitchView(2)">2画面表示</button>
+        </div>
+
     </div> <!--InputArea-->
 
     <!--============================================================================
@@ -248,6 +254,8 @@
         <p>ver:2.2.0</p>
         <p>　・画面読み込み時にプレイヤーが最小のサイズで表示される不具合を修正</p>
         <p>　・スプリッターのドラッグ操作を滑らかに行えるように修正</p>
+        <p>ver:2.2.1</p>
+        <p>　・画面数を切り替えるボタン機能を追加</p>
 
         <hr>
 
@@ -367,6 +375,28 @@
             }
         }
 
+        // ページ開始時に配信者を設定する処理
+        function SetInitializeStreamers(streamers) {
+            // デフォルト表示の配信者IDを取得
+            let defaultStreamers = JSON.parse(localStorage.getItem('DefaultStreamers'));
+            if(!defaultStreamers) {
+                defaultStreamers = DefaultStreamers;
+                localStorage.setItem('DefaultStreamers', JSON.stringify(defaultStreamers));
+            }
+
+            // 対象の iframe を新しく作り変える
+            for(var count = 0; count < defaultStreamers.length; count++) {
+                const newVideoUrl = "https://player.twitch.tv/?channel=" + defaultStreamers[count].id + "&parent=shu1515.github.io&autoplayer=true";
+                const newChatUrl = "https://www.twitch.tv/embed/" + defaultStreamers[count].id + "/chat?darkpopout=true&parent=shu1515.github.io";
+                let windowNum = count + 1;
+                document.getElementById('video-'+ windowNum).src = newVideoUrl;
+                document.getElementById('chat-'+ windowNum).src = newChatUrl;
+            };
+        }
+
+        //==============================
+        // ボタン動作
+        //==============================
         // チャット表示切り替えボタンが押されたときの動作
         function SwitchChatDisplay(windowNum){
             // 対象チャット欄の iframe を取得
@@ -421,26 +451,22 @@
             let newStreamers = JSON.stringify(defaultStreamers);
             localStorage.setItem('DefaultStreamers', newStreamers);
         }
-
-        // ページ開始時に配信者を設定する処理
-        function SetInitializeStreamers(streamers) {
-            // デフォルト表示の配信者IDを取得
-            let defaultStreamers = JSON.parse(localStorage.getItem('DefaultStreamers'));
-            if(!defaultStreamers) {
-                defaultStreamers = DefaultStreamers;
-                localStorage.setItem('DefaultStreamers', JSON.stringify(defaultStreamers));
-            }
-
-            // 対象の iframe を新しく作り変える
-            for(var count = 0; count < defaultStreamers.length; count++) {
-                const newVideoUrl = "https://player.twitch.tv/?channel=" + defaultStreamers[count].id + "&parent=shu1515.github.io&autoplayer=true";
-                const newChatUrl = "https://www.twitch.tv/embed/" + defaultStreamers[count].id + "/chat?darkpopout=true&parent=shu1515.github.io";
-                let windowNum = count + 1;
-                document.getElementById('video-'+ windowNum).src = newVideoUrl;
-                document.getElementById('chat-'+ windowNum).src = newChatUrl;
-            };
+        
+        // 画面数切り替えボタンが押されたときの動作
+        function SwitchView(windowNum) {
+            const wrapper = document.getElementById('MultiviewWrapper');
+            if(windowNum === 1) {
+                // １画面クラスを設定
+                wrapper.classList.add('SingleView');
+            } else {
+                // 1画面クラスを削除
+                wrapper.classList.remove('SingleView');
+            }   
         }
-
+        
+        //==============================
+        // ドラッグ操作
+        //==============================
         // 画面幅ドラッグ調整機能（スプリッター）
         document.addEventListener('DOMContentLoaded', ()=> {
             const resizer = document.getElementById('Resizer');
