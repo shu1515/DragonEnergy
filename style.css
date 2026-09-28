@@ -17,10 +17,11 @@
 
 /* 各配信画面（1枠分）のブロック */
 .WindowBlock  {
-  flex-grow: 0;
+  flex-grow: 1;
   flex-shrink: 0;
-  width: clac(50% - 8px);   /*初期値はほぼ半分（すき間分をマイナス）*/
-  min-width: 300px;       /* 縮められる限界の幅 */
+  flex-basis: 45%;          /*初期サイズを45%前後に*/
+  min-width: 300px;         /* 縮められる限界の幅 */
+
   display: flex;
   flex-direction: row;      /*動画とチャットを横並びに*/
   gap: 8px;                 /*動画とチャットのすき間*/
@@ -72,8 +73,13 @@ iframe {
 }
 
 /*ドラッグ中に iframe 内のマウス反応を無くして、ドラッグが途切れないようにするクラス*/
-.Dragging iframe {
+body.dragging iframe,
+body.dragging * {
     pointer-events: none !important;
+}
+/*ドラッグの起点であるスプリッターだけはマウス反応を残す*/
+body.dragging #Resizer {
+    pointer-events: auto !important;
 }
 
 /* 【通常時のチャット欄】全体の約25%の横幅に固定 */
@@ -92,4 +98,13 @@ iframe {
     width: 0px !important;   
     opacity: 0 !important;   /* 透明化 */
     pointer-events: none;    /* クリック不可 */
+}
+
+/*テキストを表示する際のスタイル*/
+.UpdateHistory p {
+    margin: 4px 0;      /*上下の不要な余白の調整*/
+    line-height: 1.4;   /*文字自体の行高を少し詰める*/
+}
+.UpdateHistory h3 {
+    margin-bottom: 8px;
 }
