@@ -291,6 +291,15 @@
 
             // デフォルトの配信者を設定
             SetInitializeStreamers();
+
+            // 画面数を復元(保存データがなければNaN（Not a Number：数字ではないという特殊な値）が返ってくる)
+            const viewWindowCountStr = localStorage.getItem('ViewWindowCount');
+            if(!viewWindowCountStr) {
+                const viewWindowCount = parseInt(viewWindowCountStr, 10); // 10進数の10
+                SwitchView(viewWindowCount);
+            } else {
+                SwitchView(1);  // デフォルトの窓数を設定
+            }
         }
 
         // 保存されたデータからお気に入りボタンを表示する処理
@@ -470,7 +479,10 @@
                 // ボタンの選択中の見た目を切り替え
                 button1.classList.remove('IsActive');
                 button2.classList.add('IsActive');
-            }   
+            }
+
+            // ローカルストレージに現在の画面数を設定
+            localStorage.setItem('ViewWindowCount', windowNum);
         }
         
         //==============================
