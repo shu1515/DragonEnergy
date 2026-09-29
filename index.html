@@ -180,8 +180,8 @@
 
         <!--画面数切り替えボタン-->
         <div class="ViewControls">
-            <button onclick="SwitchView(1)">1画面表示</button>
-            <button onclick="SwitchView(2)">2画面表示</button>
+            <button id="ViewButton1" onclick="SwitchView(1)">1画面表示</button>
+            <button id="ViewButton2" class = "IsActive" onclick="SwitchView(2)">2画面表示</button>
         </div>
 
     </div> <!--InputArea-->
@@ -455,12 +455,21 @@
         // 画面数切り替えボタンが押されたときの動作
         function SwitchView(windowNum) {
             const wrapper = document.getElementById('MultiviewWrapper');
+            const button1 = document.getElementById('ViewButton1');
+            const button2 = document.getElementById('ViewButton2');
+
             if(windowNum === 1) {
                 // １画面クラスを設定
                 wrapper.classList.add('SingleView');
+                // ボタンの選択中の見た目を切り替え
+                button1.classList.add('IsActive');
+                button2.classList.remove('IsActive');
             } else {
                 // 1画面クラスを削除
                 wrapper.classList.remove('SingleView');
+                // ボタンの選択中の見た目を切り替え
+                button1.classList.remove('IsActive');
+                button2.classList.add('IsActive');
             }   
         }
         

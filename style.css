@@ -120,6 +120,11 @@ body.dragging #Resizer {
 .ViewControls button:hover {
     background-color: #9135ff;
 }
+.ViewControls button.IsActive {
+    background-color: #9135ff;
+    color: #ffffff;
+    pointer-events: none; /*選択中のボタンは連打できないように*/
+}
 
 /* ==========================================================================
    1画面表示（.SingleView）時のレイアウト調整
