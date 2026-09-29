@@ -78,22 +78,6 @@
             background-color:#772ce8;
         }
 
-        /*チャット切り替えボタン*/
-        .ChatButton{
-            padding:8px 15px;
-            background-color: #f77f00;
-            color:white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-left: 5px;
-        }
-        .ChatButton:hover{
-            background-color: #fcbf49;
-            color: #000000;
-        }
-
         /*お気に入りフォーム*/
         .FavoriteAddButtonArea{
             border-top:1px solid #3a3a3d;
@@ -156,7 +140,6 @@
             <label>1画面目：</label>
             <input type="text" id="streamer-id-1" value="kato_junichi0817" placeholder="配信者のIDを入力" />
             <button class="ApplyButton" onclick="ChangeStreamer(1)">変更</button>
-            <button class="ChatButton" onclick="SwitchChatDisplay(1)">💬</button>
             <div id="FavContainer1" class="FavoriteButtons"></div>
         </div>
 
@@ -165,7 +148,6 @@
             <label>2画面目：</label>
             <input type="text" id="streamer-id-2" value="hanjoudesu" placeholder="配信者のIDを入力" />
             <button class="ApplyButton" onclick="ChangeStreamer(2)">変更</button>
-            <button class="ChatButton" onclick="SwitchChatDisplay(2)">💬</button>
             <div id="FavContainer2" class="FavoriteButtons"></div>
         </div>
 
@@ -194,13 +176,17 @@
             窓１
         ------------>
         <div class="WindowBlock" id="window-block-1">
-            <!--プレイヤー-->
-            <iframe 
-                id="video-1"
-                class="TwitchVideo"
-                src="https://player.twitch.tv/?channel=kato_junichi0817&parent=shu1515.github.io&autoplay=true"
-                allowfullscreen>
-            </iframe>
+            <div class="VideoContainer">
+                <!--プレイヤー-->
+                <iframe 
+                    id="video-1"
+                    class="TwitchVideo"
+                    src="https://player.twitch.tv/?channel=kato_junichi0817&parent=shu1515.github.io&autoplay=true"
+                    allowfullscreen>
+                </iframe>
+                <!--チャット開閉ボタン-->
+                <button class="ChatButton" onclick="SwitchChatDisplay(1)">💬</button>
+            </div>
             <!--チャット欄-->
             <iframe 
                 id="chat-1"
@@ -216,13 +202,17 @@
             窓２
         ------------>
         <div class="WindowBlock" id="window-block-2">
-             <!--プレイヤー-->
-             <iframe 
-                 id="video-2"
-                 class="TwitchVideo"
-                 src="https://player.twitch.tv/?channel=fmlch&parent=shu1515.github.io&autoplay=true"
-                 allowfullscreen>
-            </iframe>
+            <div class="VideoContainer">
+                <!--プレイヤー-->
+                <iframe 
+                    id="video-2"
+                    class="TwitchVideo"
+                    src="https://player.twitch.tv/?channel=fmlch&parent=shu1515.github.io&autoplay=true"
+                    allowfullscreen>
+                </iframe>
+                <!--チャット開閉ボタン-->
+                <button class="ChatButton" onclick="SwitchChatDisplay(2)">💬</button>
+            </div>
             <!--チャット欄-->
             <iframe
                 id="chat-2"
@@ -256,6 +246,9 @@
         <p>　・スプリッターのドラッグ操作を滑らかに行えるように修正</p>
         <p>ver:2.2.1</p>
         <p>　・画面数を切り替えるボタン機能を追加</p>
+        <p>ver:2.2.2</p>
+        <p>　・コメント欄開閉ボタンの配置を各配信画面の中央へ変更</p>
+        <p>　・配信画面にカーソルがあるときのみボタンを表示するように対応</p>
 
         <hr>
 

@@ -62,16 +62,6 @@ iframe {
     transition: all 0.2s ease; /* 閉じる・広がる動きを滑らかにする */
 }
 
-/* 【通常時の動画】全体の約75%の横幅を割り当てる */
-.TwitchVideo {
-    flex: 3;                 
-    width: 0;                /* 横幅計算をFlexboxの比率に委ねる */
-    height: auto !important; /* 高さはアスペクト比に任せる */
-    aspect-ratio: 16 / 9;    /* ウィンドウサイズが変わっても16:9を維持 */
-    display: block;
-    pointer-events: auto;
-}
-
 /*ドラッグ中に iframe 内のマウス反応を無くして、ドラッグが途切れないようにするクラス*/
 body.dragging iframe,
 body.dragging * {
@@ -99,6 +89,72 @@ body.dragging #Resizer {
     opacity: 0 !important;   /* 透明化 */
     pointer-events: none;    /* クリック不可 */
 }
+
+/* ==========================================================================
+   動画プレイヤーとコメント開閉ボタンを囲むコンテナ
+   ========================================================================== */
+.VideoContainer {
+    flex: 3;
+    width: 0;
+    position: relative; /*子要素（ボタン）の絶対配置の基準にする*/
+    display: block;
+}
+
+/* 【通常時の動画】全体の約75%の横幅を割り当てる */
+.TwitchVideo {
+    width: 100%;
+    height: auto !important; /* 高さはアスペクト比に任せる */
+    aspect-ratio: 16 / 9;    /* ウィンドウサイズが変わっても16:9を維持 */
+    display: block;
+    pointer-events: auto;
+}
+
+/* ==========================================================================
+   動画内のコメント開閉ボタン（中央配置レイアウト）
+   ========================================================================== */
+.ChatButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /*自身のサイズ分ズレを戻した完全に中央へ配置*/
+    z-index: 10;    /*動画より手前に表示*/
+
+    /*デフォルト：透明に設定*/
+    opacity: 0;
+    pointer-events: none;
+
+    /*ボタンのデザイン*/
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
+    background-color: rgba(24, 24, 27, 0.85);
+    color: #efeff1;
+    border: 2px solid #2f2f35;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /*浮かせるための影*/
+
+    /*透明度の変化を滑らかにする設定*/
+    transition: opacity 0.2s ease, background-color 0.2s ease, transform 0.2 ease;
+}
+.ChatButton:hover {
+    opacity: 1;
+    pointer-events: auto;
+    background-color: #9135ff;
+    border-color: #efeff1;
+    transform: translate(-50%, -50%) scale(1.1);    /*中央を維持したまま少し大きくする*/
+}
+/*WIndowBlock（配信画面orコメント欄）にカーソルがあるときだけボタンを表示するスタイル
+  (iframe対策)focus-within でiframeのウィンドウにフォーカスしたことを検知*/
+.WindowBlock:hover .ChatButton,
+.WindowBlock:focus-within .ChatButton { 
+    opacity: 1;
+    pointer-events: auto; /*表示されているときだけクリック可能に*/
+}
+
 
 /* ==========================================================================
    画面切り替えコントロール（ボタン用スタイル）
