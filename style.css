@@ -96,12 +96,15 @@ body.dragging #Resizer {
 .VideoContainer {
     flex: 3;
     width: 0;
-    position: relative; /*子要素（ボタン）の絶対配置の基準にする*/
-    display: block;
+    display: grid;
+    grid-template-areas: "overlay";
+    align-items: center;
+    justify-items: center;
 }
 
 /* 【通常時の動画】全体の約75%の横幅を割り当てる */
 .TwitchVideo {
+    grid-area: overlay;
     width: 100%;
     height: auto !important; /* 高さはアスペクト比に任せる */
     aspect-ratio: 16 / 9;    /* ウィンドウサイズが変わっても16:9を維持 */
@@ -113,10 +116,7 @@ body.dragging #Resizer {
    動画内のコメント開閉ボタン（中央配置レイアウト）
    ========================================================================== */
 .ChatButton {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /*自身のサイズ分ズレを戻した完全に中央へ配置*/
+    grid-area: overlay;
     z-index: 10;    /*動画より手前に表示*/
 
     /*デフォルト：透明に設定*/
@@ -138,14 +138,12 @@ body.dragging #Resizer {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /*浮かせるための影*/
 
     /*透明度の変化を滑らかにする設定*/
-    transition: opacity 0.2s ease, background-color 0.2s ease, transform 0.2 ease;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
 }
 .ChatButton:hover {
-    opacity: 1;
-    pointer-events: auto;
     background-color: #9135ff;
     border-color: #efeff1;
-    transform: translate(-50%, -50%) scale(1.1);    /*中央を維持したまま少し大きくする*/
+    transform: scale(1.1);    /*中央を維持したまま少し大きくする*/
 }
 /*WIndowBlock（配信画面orコメント欄）にカーソルがあるときだけボタンを表示するスタイル
   (iframe対策)focus-within でiframeのウィンドウにフォーカスしたことを検知*/

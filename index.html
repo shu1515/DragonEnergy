@@ -406,6 +406,9 @@
 
             // チャット欄のトグル変更
             chatElement.classList.toggle('IsHidden');
+            
+            // クリックしたボタンのフォーカスを強制的に解除して選択状態を外す
+            document.activeElement.blur();
         }
 
         // お気に入りボタンが押されたときの動作
