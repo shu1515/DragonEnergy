@@ -183,17 +183,74 @@ body.dragging #Resizer {
 /* ==========================================================================
    1画面表示（.SingleView）時のレイアウト調整
    ========================================================================== */
-/* 1画面時は、窓1の幅を強制的に100%にして全画面化する */
+/* ---1画面表示---
+    スプリッターと窓2を完全に非表示にする */
+#MultiviewWrapper.SingleView {
+    display: flex !important;
+}
 #MultiviewWrapper.SingleView #window-block-1 {
   flex-basis: 100% !important;
   width: 100% !important;
 }
-
-/* 1画面時は、スプリッターと窓2を完全に非表示にする */
 #MultiviewWrapper.SingleView #Resizer,
-#MultiviewWrapper.SingleView #window-block-2 {
+#MultiviewWrapper.SingleView #window-block-2,
+#MultiviewWrapper.SingleView #window-block-3,
+#MultiviewWrapper.SingleView #window-block-4 {
   display: none !important;
 }
+
+/* ---2画面表示---
+    3と4を非表示に */
+#MultiviewWrapper:not(.SingleView):not(.ThreeView):not(.FourView) #window-block-3,
+#MultiviewWrapper:not(.SingleView):not(.ThreeView):not(.FourView) #window-block-4 {
+  display: none !important;
+}
+
+/* ---3画面表示---
+    4を非表示に */
+#MultiviewWrapper.ThreeView:not(.SingleView) {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);  /* 横に2列並べる */
+    gap: 15px;
+}
+#MultiviewWrapper.ThreeView:not(.SingleView) .WindowBlock {
+    flex-basis: 100% !important;
+    width: 100% !important;
+}
+#MultiviewWrapper.ThreeView:not(.SingleView) #window-block-3 {
+    grid-column: span 2;
+    max-width: 50%;
+    margin: 0 auto;
+    width: 100%;
+}
+#MultiviewWrapper.ThreeView #Resizer,
+#MultiviewWrapper.ThreeView #window-block-4 {
+  display: none !important;
+}
+
+/* ---4画面表示---*/
+#MultiviewWrapper.FourView:not(.SingleView) {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);  /*横に2列並べる(自動で2x2になる)*/
+    gap: 15px;
+}
+#MultiviewWrapper.FourView:not(.SingleView) #Resizer {
+    display: none !important;
+}
+#MultiviewWrapper.FourView:not(.SingleView) .WindowBlock {
+    flex-basis: 100% !important;
+    width: 100% !important;
+}
+
+
+
+
+
+
+
+
+
+
 
 /* ==========================================================================
    テキスト表示スタイル
