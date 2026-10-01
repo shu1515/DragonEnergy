@@ -180,8 +180,8 @@
         <div class="ViewControls">
             <button id="ViewButton1" onclick="SwitchView(1)">1画面表示</button>
             <button id="ViewButton2" class = "IsActive" onclick="SwitchView(2)">2画面表示</button>
-            <button id="ViewButton1" onclick="SwitchView(3)">3画面表示</button>
-            <button id="ViewButton2" onclick="SwitchView(4)">4画面表示</button>
+            <button id="ViewButton3" onclick="SwitchView(3)">3画面表示</button>
+            <button id="ViewButton4" onclick="SwitchView(4)">4画面表示</button>
         </div>
 
     </div> <!--InputArea-->
@@ -354,7 +354,7 @@
 
             // 画面数を復元(保存データがなければNaN（Not a Number：数字ではないという特殊な値）が返ってくる)
             const viewWindowCountStr = localStorage.getItem('ViewWindowCount');
-            if(!viewWindowCountStr) {
+            if(viewWindowCountStr) {
                 const viewWindowCount = parseInt(viewWindowCountStr, 10); // 10進数の10
                 SwitchView(viewWindowCount);
             } else {
