@@ -10,17 +10,6 @@
     
     <style>
 
-        /*まどっちアイコンを表示するスタイル*/
-        .MadocchiIcon{
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 64px;
-            height: 64px;
-            z-index: 9999;          /*zorder的なやつ他の要素より手前に表示*/
-            pointer-events: none;   /* アイコンの下にある要素をクリックできるようにする場合 */
-        }
-
         /*レイアウト調整用のシンプルなスタイル例*/
         .InputRow{
             display: flex;
@@ -286,7 +275,10 @@
         </div>
 
         <!--画面右下にアイコン表示-->
-        <img src="favicon.png" alt="favicon" class="MadocchiIcon">
+        <button class="MadocchiButton" onclick="ToggleFullScreen()">    
+            <img src="favicon.png" alt="favicon">
+        </button>
+        
 
     </div><!--MultiviewWrapper-->
 
@@ -589,6 +581,21 @@
             localStorage.setItem('ViewWindowCount', windowNum);
         }
         
+        // まどっちアイコンを押したときの動作（全画面モード）
+        function ToggleFullScreen() {
+            // すでに全画面表示になっているかチェック
+            if (!document.fullscreenElement) {
+                // 全画面になっていなければ、ページ全体（document.documentElement）を全画面化
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.error(`全画面モードへの切り替えに失敗しました: ${err.message}`);
+                });
+            } else {
+                // すでに全画面なら、全画面モードを解除
+                document.exitFullscreen();
+            }
+        }
+
+
         //==============================
         // ドラッグ操作
         //==============================
