@@ -2,10 +2,585 @@
 <html lang="ja">
 <head>
     <meta charset="utf-8">
-    <title>タイトル：初めてのWebサイト</title>
+    <title>まどっち</title>
+
+    <!--ファイル読み込み-->
+    <link rel="icon" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    
 </head>
 <body>
-    <h1>やぁ！初めてのWebサイトだよ</h1>
-    <p>やぁやぁ</p>
+
+    <!--サイトヘッダー-->
+    <div class="SiteHeader">
+        <!--タイトル-->
+        <h1>まどっち</h1>
+        <!-- アクセスカウンター -->
+        <script language="javascript" type="text/javascript" src="//counter1.fc2.com/counter.php?id=41203776&main=1"></script><noscript><img src="//counter1.fc2.com/counter_img.php?id=41203776&main=1" /></noscript>
+        <!-- オンラインカウンター -->
+        現在の閲覧者数:<script language="javascript" type="text/javascript" src="//counter1.fc2.com/views.php?id=41203776&main=1"></script><noscript><img src="//counter1.fc2.com/counter_now.php?id=41203776&main=1" /></noscript>
+    </div>
+
+    <!--============================================================================
+        配信者を入力するフォーム
+    ============================================================================-->
+    <div class="InputArea">
+        <h4>配信者の変更</h4>
+        <p>　任意の配信者のTwitchID、もしくはTwitchのURLを以下に入力（右側のボタンはショートカット機能）</p>
+
+        <!--お気に入りボタンをまとめて並べる-->
+        <div id="FavoriteContainer" class="FavoriteButtonsContainer"></div>
+
+        <!--お気に入りボタンを追加するフォーム-->
+        <div class="FavoriteAddButtonArea">
+            <h4>配信者の登録・リセット</h4>
+            <input type="text" id="new-fav-name" placeholder="表示名">
+            <input type="text" id="new-fav-id" placeholder="TwitchのID(or URL)">
+            <button class="FavoriteAddButton" onclick="AddNewFavorite()">ショートカット登録</button>
+            <button class="FavoriteButton" style="margin-left: 20px; background-color: #d90429;" onclick="ResetFavorites()">リセット</button>
+        </div>
+
+    </div> <!--InputArea-->
+
+    <!--============================================================================
+        表示エリア
+    ============================================================================-->
+    <div id="MultiviewWrapper">
+        <!----------
+            窓１
+        ------------>
+        <div class="WindowBlock" id="window-block-1">
+            <div class="VideoContainer">
+                <!--プレイヤー-->
+                <iframe 
+                    id="video-1"
+                    class="TwitchVideo"
+                    src="https://player.twitch.tv/?channel=kato_junichi0817&parent=shu1515.github.io&autoplay=true"
+                    allowfullscreen>
+                </iframe>
+                <!--チャット開閉ボタン-->
+                <button class="ChatButton" onclick="SwitchChatDisplay(1)">💬</button>
+            </div>
+            <!--チャット欄-->
+            <iframe 
+                id="chat-1"
+                class="TwitchChat"
+                src="https://www.twitch.tv/embed/kato_junichi0817/chat?darkpopout=true&parent=shu1515.github.io">
+            </iframe>
+        </div>
+
+        <!--左右の画面を調整するスプリッター-->
+        <div id="Resizer" class="Resizer"></div>
+
+        <!----------
+            窓２
+        ------------>
+        <div class="WindowBlock" id="window-block-2">
+            <div class="VideoContainer">
+                <!--プレイヤー-->
+                <iframe 
+                    id="video-2"
+                    class="TwitchVideo"
+                    src="https://player.twitch.tv/?channel=fmlch&parent=shu1515.github.io&autoplay=true"
+                    allowfullscreen>
+                </iframe>
+                <!--チャット開閉ボタン-->
+                <button class="ChatButton" onclick="SwitchChatDisplay(2)">💬</button>
+            </div>
+            <!--チャット欄-->
+            <iframe
+                id="chat-2"
+                class="TwitchChat"
+                src="https://www.twitch.tv/embed/fmlch/chat?darkpopout=true&parent=shu1515.github.io">
+            </iframe>
+        </div>
+
+        <!----------
+            窓３
+        ------------>
+        <div class="WindowBlock" id="window-block-3">
+            <div class="VideoContainer">
+                <!--プレイヤー-->
+                <iframe 
+                    id="video-3"
+                    class="TwitchVideo"
+                    src="https://player.twitch.tv/?channel=fmlch&parent=shu1515.github.io&autoplay=true"
+                    allowfullscreen>
+                </iframe>
+                <!--チャット開閉ボタン-->
+                <button class="ChatButton" onclick="SwitchChatDisplay(3)">💬</button>
+            </div>
+            <!--チャット欄-->
+            <iframe
+                id="chat-3"
+                class="TwitchChat"
+                src="https://www.twitch.tv/embed/fmlch/chat?darkpopout=true&parent=shu1515.github.io">
+            </iframe>
+        </div>
+
+        <!----------
+            窓４
+        ------------>
+        <div class="WindowBlock" id="window-block-4">
+            <div class="VideoContainer">
+                <!--プレイヤー-->
+                <iframe 
+                    id="video-4"
+                    class="TwitchVideo"
+                    src="https://player.twitch.tv/?channel=fmlch&parent=shu1515.github.io&autoplay=true"
+                    allowfullscreen>
+                </iframe>
+                <!--チャット開閉ボタン-->
+                <button class="ChatButton" onclick="SwitchChatDisplay(4)">💬</button>
+            </div>
+            <!--チャット欄-->
+            <iframe
+                id="chat-4"
+                class="TwitchChat"
+                src="https://www.twitch.tv/embed/fmlch/chat?darkpopout=true&parent=shu1515.github.io">
+            </iframe>
+        </div>
+
+        <!--画面右下にアイコン表示-->
+        <button class="MadocchiButton" onclick="ToggleFullScreen()">    
+            <img src="favicon.png" alt="favicon">
+        </button>
+        
+
+    </div><!--MultiviewWrapper-->
+
+    <!--============================================================================
+        画面下部にテキストを表示するエレメント
+    ============================================================================-->
+    <div class="UpdateHistory">
+        <h3>▼ 更新履歴 ▼</h3>
+        <p>ver:2.1.5</p>
+        <p>　・ページ読み込みの際、最後に表示していた配信を表示するように修正</p>
+        <p>ver:2.1.6</p>
+        <p>　・アイコン・背景画像を設定</p>
+        <p>ver:2.1.7</p>
+        <p>　・アクセスカウンターを追加</p>
+        <p>ver:2.1.8</p>
+        <p>　・ウィンドウサイズに応じて窓枠のサイズを変更するように対応</p>
+        <p>ver:2.1.9</p>
+        <p>　・ウィンドウサイズを変更できるスプリッターを追加</p>
+        <p>ver:2.2.0</p>
+        <p>　・画面読み込み時にプレイヤーが最小のサイズで表示される不具合を修正</p>
+        <p>　・スプリッターのドラッグ操作を滑らかに行えるように修正</p>
+        <p>ver:2.2.1</p>
+        <p>　・画面数を切り替えるボタン機能を追加</p>
+        <p>ver:2.2.2</p>
+        <p>　・コメント欄開閉ボタンの配置を各配信画面の中央へ変更</p>
+        <p>　・配信画面にカーソルがあるときのみボタンを表示するように対応</p>
+        <p>ver:2.2.3</p>
+        <p>　・4窓に対応</p>
+        <p>ver:2.2.4</p>
+        <p>　・まどっちアイコンを押したときにフルスクリーン化</p>
+        <p>ver:2.2.5</p>
+        <p>　・ショートカットボタンの表示を整理</p>
+        <p>　・ショートカットボタンを押すことで画面の表示を切り替えるように対応</p>
+        <p>ver:2.2.6</p>
+        <p>　・全画面にしたときに不要なUIを非表示へ</p>
+
+        <hr>
+
+        <h3>▼ 以下、気が向いたら実装 ▼</h3>
+        <p>・シアターモード（不要なUIを非表示に）</p>
+        <p>・音声出力先の変更（窓ごとに出力先を変えるのはさすがに厳しい？）</p>
+        <p>・ショートカットキー登録中の配信者の配信中表示（難易度高）</p>
+        <p>・レイアウトサイズや配置をいい感じに調整できるように</p>
+        <p>・コメントの弾幕表示</p>
+    </div>
+    
+    
+    <!--============================================================================
+        スクリプト
+    ============================================================================-->
+    <script>
+
+        // 最初から登録しておくデフォルトのお気に入りリスト
+        const DefaultFavorites=[
+            { name: "FML", id: "fmlch" },
+        ];
+
+        // 最初から登録しておくデフォルトのチャンネル
+        const DefaultStreamers=[
+            {id:"fmlch"},
+        ];
+
+        // 現在開いている配信者情報を保持する配列
+        let activeStreamers = [];
+
+        // ページを読み込んだ時に実行する処理
+        window.onload = function(){           
+
+            // お気に入りデータの読み込み
+            let favorites = JSON.parse(localStorage.getItem('MadocchiFavorites'));
+            if(!favorites){
+                favorites = DefaultFavorites;
+                localStorage.setItem('MadocchiFavorites', JSON.stringify(favorites));
+            }
+
+            // 前回開いていた配信画面の状態を復元
+            let savedActive = JSON.parse(localStorage.getItem('ActiveStreamers'));
+            if(savedActive && savedActive.length > 0) {
+                activeStreamers = savedActive;
+            } else {
+                // 保存データがなければデフォルトで最初の２つを開く
+                activeStreamers = DefaultStreamers;
+            }
+
+            // ボタンの描画と画面の更新
+            RenderFavoriteButtons(favorites);
+            UpdateLayout();
+        }
+
+        // 保存されたデータからお気に入りボタンを表示する処理
+        function RenderFavoriteButtons(favorites) {
+            const container = document.getElementById('FavoriteContainer');
+            container.innerHTML = '';
+
+            const sortedFavs = [...favorites].sort((a,b) => {
+                const aIndex = activeStreamers.findIndex(s => s.id.toLowerCase() === a.id.toLowerCase());
+                const bIndex = activeStreamers.findIndex(s => s.id.toLowerCase() === b.id.toLowerCase());
+
+                const aIsOpen = (aIndex !== -1);
+                const bIsOpen = (bIndex !== -1);
+
+                // aを表示中なら左に寄せる
+                if(aIsOpen && !bIsOpen) {
+                    return -1;
+                }
+                // bを表示中なら右に寄せる
+                if(!aIsOpen && bIsOpen) {
+                    return 1;
+                }
+                // 両方とも表示しているなら番号順にソート
+                if(aIsOpen && bIsOpen) {
+                    return aIndex - bIndex;
+                }
+                // どちらも閉じているなら順番は変えない
+                return 0;
+            });
+
+            // 読み込んだリストの分だけボタンを動的生成
+            sortedFavs.forEach((favorite, index) => {
+                const button = document.createElement('button');
+                button.className = 'FavoriteButton';
+                button.textContent = favorite.name;
+
+                // 表示画面のインデックスを取得
+                const activeIndex = activeStreamers.findIndex(s => s.id.toLowerCase() === favorite.id.toLowerCase());
+                if(activeIndex !== -1) {
+                     // 何番目の画面に表示しているかをバッジとして表示
+                     button.classList.add('IsActive');
+                     
+                     const badge = document.createElement('span');
+                     badge.className = 'FavoriteBadge';
+                     badge.textContent = activeIndex + 1;
+                     button.appendChild(badge);
+                }
+
+                // 現在、その配信が開かれているかをチェックし色を付ける
+                const isActive = activeStreamers.some(s => s.id.toLowerCase() === favorite.id.toLowerCase());
+                if(isActive) {
+                    button.classList.add('IsActive');
+                }
+
+                // ボタンクリック時の挙動
+                button.onclick = function() {
+                    ToggleStreamer(favorite.id, button);
+                };
+
+                container.appendChild(button);
+            });
+        }
+
+        // 新しいボタンを追加したときの処理
+        function AddNewFavorite() {
+            const nameInput = document.getElementById('new-fav-name');
+            const idInput = document.getElementById('new-fav-id');
+
+            if(!nameInput.value || !idInput.value) {
+                alert("表示名とTwitchIDを入力してください。");
+                return;
+            }
+
+            // 現在のリストを読み込み、新しいお気に入りを追加する
+            let favorites = JSON.parse(localStorage.getItem('MadocchiFavorites')) || DefaultFavorites;
+            favorites.push({ name: nameInput.value, id: idInput.value});
+            // LocalStorage への書き込み
+            localStorage.setItem('MadocchiFavorites', JSON.stringify(favorites));
+
+            // 入力欄を空へ
+            nameInput.value = '';
+            idInput.value = '';
+
+            // ボタンの見た目を更新
+            RenderFavoriteButtons(favorites);
+        }
+
+        // ボタンをリセットする処理
+        function ResetFavorites() {
+            if(confirm('ショートカットをリセットしますか？')) {
+                localStorage.removeItem('MadocchiFavorites');
+                localStorage.removeItem('ActiveStreamers');
+                location.reload();
+            }
+        }
+
+        // 配信画面の数に応じてCSSクラスの付与とURL設定を行う関数
+        function UpdateLayout() {
+            const wrapper = document.getElementById('MultiviewWrapper');
+            const windowCount = activeStreamers.length;
+
+            // CSSクラスを完全にリセット
+            wrapper.classList.remove('SingleView', 'ThreeView','FourView');
+
+            // 画面数に応じたCSSクラスの付与
+            if(windowCount === 1) {
+                wrapper.classList.add('SingleView');
+            } else if (windowCount === 3) {
+                wrapper.classList.add('ThreeView');
+            } else if (windowCount === 4) {
+                wrapper.classList.add('FourView');
+            }
+
+            // 4つの窓すべての iframe の src を更新（開いていない窓は空にするか、CSSで隠れる）
+            for(let i = 1; i <= 4; i++) {
+                const videoIframe = document.getElementById(`video-${i}`);
+                const chatIframe = document.getElementById(`chat-${i}`);
+
+                if(i <= windowCount) {
+                    // 開くべき画面にはURLをセット
+                    const currentId = activeStreamers[i - 1].id;
+                    const targetVideoSrc = "https://player.twitch.tv/?channel=" + currentId + "&parent=shu1515.github.io&autoplayer=true";
+                    const targetChatSrc = "https://www.twitch.tv/embed/" + currentId + "/chat?darkpopout=true&parent=shu1515.github.io";
+
+                    if(videoIframe.src !== targetVideoSrc) {
+                        videoIframe.src = targetVideoSrc;
+
+                        // 新しく開く画面のチャット欄はデフォルト非表示に設定
+                        if(chatIframe && !chatIframe.classList.contains('IsHidden')) {
+                            chatIframe.classList.add('IsHidden');
+                        }
+
+                        if(chatIframe.src !== targetChatSrc) {
+                            chatIframe.src = targetChatSrc;
+                        }
+                    }
+
+                    // フォームの入力欄の文字も連動して書き換える
+                    const inputField = document.getElementById('streamer-id-$[i]');
+                    if (inputField) {
+                        inputField.value = currentId;
+                    }
+                } else {
+                    // 閉じている画面は、裏で配信が流れないように src を空にする
+                    if(videoIframe.src !== 'about:blank') {
+                        videoIframe.src = 'about:blank';
+                    }
+                    if(chatIframe.src !== 'about:blank') {
+                        chatIframe.src = 'about:blank';
+                    }
+                }
+            }
+        }
+
+        // フルスクリーン画面切り替え時のイベント
+        // ESCキーやボタンなど「全画面状態」を検知して表示を切り替える
+        document.addEventListener("fullscreenchange", ()=> {
+            const inputArea = document.querySelector(".InputArea");
+            const updateHistory = document.querySelector(".UpdateHistory");
+            const siteHeader = document.querySelector(".SiteHeader");
+
+            if (document.fullscreenElement) {
+                // 全画面モードになったら非表示にする
+                if (inputArea) inputArea.classList.add("IsHidden");
+                if (updateHistory) updateHistory.classList.add("IsHidden");
+                if (siteHeader) siteHeader.classList.add("IsHidden"); 
+            } else {
+                // 全画面モードが解除されたら（Escキー含む）再表示する
+                if (inputArea) inputArea.classList.remove("IsHidden");
+                if (updateHistory) updateHistory.classList.remove("IsHidden");
+                if (siteHeader) siteHeader.classList.remove("IsHidden");
+            }
+        });
+
+        //==============================
+        // ボタン動作
+        //==============================
+        // チャット表示切り替えボタンが押されたときの動作
+        function SwitchChatDisplay(windowNum){
+            // 対象チャット欄の iframe を取得
+            const chatElement = document.getElementById('chat-' + windowNum);
+
+            // チャット欄のトグル変更
+            chatElement.classList.toggle('IsHidden');
+            
+            // クリックしたボタンのフォーカスを強制的に解除して選択状態を外す
+            document.activeElement.blur();
+        }
+
+        // 配信者変更ボタンが押されたときの動作
+        function ChangeStreamer(windowNum){
+            // 入力フォームに入力された文字（ID）を読み取る
+            let inputValue = document.getElementById('streamer-id-1').value;
+            if(windowNum == 2){
+                inputValue = document.getElementById('streamer-id-2').value;
+            }
+            if(windowNum == 3){
+                inputValue = document.getElementById('streamer-id-3').value;
+            }
+            if(windowNum == 4){
+                inputValue = document.getElementById('streamer-id-4').value;
+            }
+
+            // URLが入力された場合、ID部分のみを抜き取る処理
+            let streamerId = inputValue.trim();
+            if(streamerId.includes('twitch.tv/')){
+                streamerId = streamerId.split('twitch.tv/')[1].split('?')[0].split('/')[0];
+            }
+
+            // 何も入力がない場合は処理しない
+            if(!streamerId){
+                alert('IDを入力してください');
+                return;
+            }
+
+            // 対象の iframe を新しく作り変える
+            const newVideoUrl = "https://player.twitch.tv/?channel=" + streamerId + "&parent=shu1515.github.io&autoplayer=true"
+            const newChatUrl = "https://www.twitch.tv/embed/" + streamerId + "/chat?darkpopout=true&parent=shu1515.github.io"
+
+            document.getElementById('video-'+ windowNum).src = newVideoUrl;
+            document.getElementById('chat-'+ windowNum).src = newChatUrl;
+
+            // LocalStorage で保持している視聴中の配信者IDを更新
+            var defaultStreamers = JSON.parse(localStorage.getItem('DefaultStreamers'));
+            var index = windowNum - 1;
+            defaultStreamers[index].id = streamerId;
+
+            // LocalStorage も更新
+            let newStreamers = JSON.stringify(defaultStreamers);
+            localStorage.setItem('DefaultStreamers', newStreamers);
+        }
+
+        // 配信者ボタンが押されたときの動作
+        function ToggleStreamer(streamerId, buttonElement) {
+            const index = activeStreamers.findIndex(s => s.id.toLowerCase() === streamerId.toLowerCase());
+
+            if(index !== -1) {
+                // ボタンを閉じる
+                activeStreamers.splice(index, 1);
+                buttonElement.classList.remove('IsActive');
+            } else {
+                // ボタンを開く
+                if(activeStreamers.length >= 4) {
+                    alert("同時に表示できるのは最大４画面までです。");
+                    return;
+                }
+                activeStreamers.push({id:streamerId});
+                buttonElement.classList.add('IsActive');
+            }
+
+            // 状態を記憶して画面を更新
+            localStorage.setItem('ActiveStreamers', JSON.stringify(activeStreamers));
+            UpdateLayout();
+
+            // ボタンの並び順と色を最新状態に変えて再描画
+            let favorites = JSON.parse(localStorage.getItem('MadocchiFavorites')) || DefaultFavorites;
+            RenderFavoriteButtons(favorites);
+        }
+        
+        // まどっちアイコンを押したときの動作（全画面モード）
+        function ToggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.error(`全画面モードへの切り替えに失敗しました: ${err.message}`);
+                });
+            } else {
+                // すでに全画面なら、全画面モードを解除
+                document.exitFullscreen().catch(err => {
+                    console.error(`全画面解除に失敗しました: ${err.message}`);
+                });
+            }
+        }
+
+        //==============================
+        // ドラッグ操作
+        //==============================
+        // 画面幅ドラッグ調整機能（スプリッター）
+        document.addEventListener('DOMContentLoaded', ()=> {
+            const resizer = document.getElementById('Resizer');
+            const leftBlock = document.getElementById('window-block-1');
+            const rightBlock = document.getElementById('window-block-2');
+            const wrapper = document.getElementById('MultiviewWrapper');
+
+            if(!resizer || !leftBlock || !rightBlock || !wrapper) return;
+
+            // 読み込み時の初期サイズを50%ずつに固定する処理
+            leftBlock.style.width = 'calc(50% - 4px)';
+            rightBlock.style.width = 'calc(50% - 4px)';
+            leftBlock.style.flex = 'none';
+            rightBlock.style.flex = 'none';
+
+            resizer.addEventListener('mousedown', (e) =>{
+                e.preventDefault();
+
+                // ドラッグ中の iframe の誤作動を防ぐため全体にクラスを付与
+                document.body.classList.add('dragging');
+
+                // ドラッグ開始時のマウス位置と各要素の幅を取得
+                const startX = e.clientX;
+                const leftWidth = leftBlock.getBoundingClientRect().width;
+                const rightWidth = rightBlock.getBoundingClientRect().width;
+                const totalWidth = leftWidth + rightWidth;
+
+                const onMouseMove = (moveEvent) => {
+                    // 移動した距離を計算
+                    const deltaX = moveEvent.clientX - startX;
+
+                    // 新しい幅を計算
+                    let newLeftWidth = leftWidth + deltaX;
+                    let newRightWidth = rightWidth - deltaX;
+
+                    // 最小幅（300px）の制限をかける
+                    if(newLeftWidth < 300) {
+                        newLeftWidth = 300;
+                        newRightWidth = totalWidth - 300;
+                    }
+                    if(newRightWidth < 300) {
+                        newRightWidth = 300;
+                        newLeftWidth = totalWidth - 300;
+                    }
+
+                    // ピクセルではなくパーセンテージに変換して適用（ウィンドウサイズ変更に強くするため）
+                    const leftPercent = (newLeftWidth / totalWidth) * 100;
+                    const rightPercent = (newRightWidth / totalWidth) * 100;
+
+                    // 縦棒の太さ分（8px）を考慮して幅を適用
+                    leftBlock.style.flex = 'none';
+                    rightBlock.style.flex = 'none';
+                    leftBlock.style.width = `calc(${leftPercent}% - 4px)`;
+                    rightBlock.style.width = `calc(${rightPercent}% - 4px)`;
+                }
+
+                const onMouseUp = () => {
+                    // ドラッグ終了処理
+                    document.body.classList.remove('dragging');
+                    document.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseup', onMouseUp);
+                };
+
+                // マウスの動きを監視開始
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            })
+        })
+
+
+
+    </script>
+
 </body>
 </html>
